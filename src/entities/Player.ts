@@ -1,19 +1,20 @@
 
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core'
+import { Entity, Column } from 'typeorm'
+import {CustomBaseEntity} from './Base'
 
 @Entity()
-export class Player {
+export class Player extends CustomBaseEntity {
 
-	@PrimaryKey()
-	_id: number
+	@Column()
+	discord_id: string
 
-	@Property()
-	created_at = new Date()
-
-	@Property({ onUpdate: () => new Date() })
-	updated_at = new Date()
-
-	@Property()
+	@Column()
 	name: string
+
+	constructor( discord_id: string ) {
+		super()
+
+		this.discord_id = discord_id
+	}
 
 }

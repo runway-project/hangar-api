@@ -1,10 +1,11 @@
 {
 	"compilerOptions": {
-		"module": "Node16",
+		"module": "ES2022",
+		"declaration": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
-		"target": "ES2017",
+		"target": "ESNext",
 		"noImplicitAny": true,
 		"moduleResolution": "node",
 		"sourceMap": true,
@@ -14,7 +15,8 @@
 			"*": [
 				"node_modules/*"
 			]
-		}
+		},
+		"lib": ["ES6", "DOM"]
 	},
 	"include": [
 		"src/**/*"

@@ -1,40 +1,17 @@
-import { BeforeUpdate, Entity, ManyToOne, OnLoad, PrimaryKey, Property } from "@mikro-orm/core"
 
+import { Entity, Column } from 'typeorm'
+import {CustomBaseEntity} from './Base'
 import { Player } from './Player'
 
 import { compress, decompress } from '../utils/compression'
 
 @Entity()
-export class Vessel {
+export class Vessel extends CustomBaseEntity {
 
-	@PrimaryKey()
-	_id: number
-
-	@Property()
-	created_at = new Date()
-
-	@Property({ onUpdate: () => new Date() })
-	updated_at = new Date()
-
-	@ManyToOne()
+	@Column()
 	player: Player
 
-	@Property()
+	@Column()
 	name: string
-
-	@Property()
-	protected serialized_craft_file: Buffer
-
-	craft_file: string
-
-	@OnLoad()
-	async init() {
-		this.craft_file = await decompress(this.serialized_craft_file)
-	}
-
-	@BeforeUpdate()
-	async serialize() {
-		this.serialized_craft_file = await compress(this.craft_file)
-	}
 
 }

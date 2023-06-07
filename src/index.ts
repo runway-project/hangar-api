@@ -1,9 +1,8 @@
 
 import 'dotenv/config'
+import 'reflect-metadata'
 
-import { MikroORM } from '@mikro-orm/core'
-import { SqliteDriver } from '@mikro-orm/sqlite'
-import { TsMorphMetadataProvider } from '@mikro-orm/reflection'
+import { DataSource } from 'typeorm'
 
 import express from 'express'
 import expressSession from 'express-session'
@@ -11,14 +10,17 @@ import expressSession from 'express-session'
 import { discordOAuth } from './middleware/auth'
 import { addCSP } from './middleware/csp'
 
-const PORT = 9999
+import { Player } from './entities/Player'
 
-const orm = await MikroORM.init<SqliteDriver>({
-	metadataProvider: TsMorphMetadataProvider,
-
-	entities: ['./dist/entities/**/*.js'],
-	entitiesTs: ['./src/entities/**/*.ts'],
+const db = new DataSource({
+	type: 'sqlite',
+	database: 'dev.sqlite3',
+	entities: [Player],
+	logging: true,
+	synchronize: process.env.NODE_ENV === 'development',
 })
+
+const PORT = 9999
 
 const app = express()
 
@@ -31,9 +33,13 @@ app.use(addCSP)
 app.use(discordOAuth({
 	client_id: process.env.DISCORD_CLIENT_ID,
 	client_secret: process.env.DISCORD_CLIENT_SECRET,
-	redirect_uri: `http://localhost:${PORT},`
+	redirect_uri: `http://localhost:${PORT}`,
 }))
 
-app.listen(PORT, '127.0.0.1', () => {
-	console.log('Online!')
-})
+
+db.initialize()
+	.then(() => {
+		app.listen(PORT, '127.0.0.1', () => {
+			console.log('Online!')
+		})
+	})

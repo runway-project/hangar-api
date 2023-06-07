@@ -2,6 +2,20 @@
 import { Request, Response, NextFunction } from 'express'
 import fetch from 'node-fetch'
 
+import { Player } from '../entities/Player'
+
+export interface UserSession {
+	uid: string,
+	discord_username: string,
+}
+
+declare module 'express-session' {
+	interface SessionData {
+		user?: UserSession,
+		is_logged_in?: boolean,
+	}
+}
+
 export interface DiscordOAuthConfig {
 	client_id: string,
 	client_secret: string,
@@ -13,14 +27,24 @@ export interface DiscordOAuthTokenResp {
 	access_token: string,
 }
 
+export interface DiscordProfileResp {
+	id: string,
+	username: string,
+}
+
 /**
  * Adds a basic content security policy header, preventing certain classes of attack
  */
 export function discordOAuth( config: DiscordOAuthConfig ) {
 	return async function(req: Request, resp: Response, next: NextFunction) {
 		
-		if( ! req.query.code || typeof req.query.code !== 'string' ) return resp.end('No Discord token sent')
+		// Skip processing this if we're already logged in
+		if( req.session.is_logged_in ) return next()
 
+		// If we haven't received any login info from Discord, continue processing
+		if( ! req.query.code || typeof req.query.code !== 'string' ) return next()
+
+		// Authenticate the code we received with Discord to log the user in
 		const token_response = await fetch( 'https://discord.com/api/oauth2/token', {
 			method: 'POST',
 			body: new URLSearchParams({
@@ -34,14 +58,26 @@ export function discordOAuth( config: DiscordOAuthConfig ) {
 			}
 		}).then(res => res.json() as any as DiscordOAuthTokenResp)
 
+		// Fetch the user's profile info from Discord
 		const user = await fetch( 'https://discord.com/api/users/@me', {
 			headers: {
 				authorization: `${token_response.token_type} ${token_response.access_token}`
 			},
-		} ).then(res => res.json())
+		} ).then(res => res.json() as any as DiscordProfileResp)
 
-		console.log(user)
+		// Ensure we have the user saved in the DB
 
-		return resp.end('OK!')
+		const player = new Player( user.id )
+
+		player.name = user.username
+
+		await player.save()
+
+		req.session.user = {
+			uid: user.id,
+			discord_username: user.username
+		}
+
+		return next()
 	}
 }

@@ -1,5 +1,4 @@
 
-import { Vec3 } from '../models/Vector'
 import { Vector3, Quaternion } from 'three'
 
 /**
@@ -32,7 +31,7 @@ export type KSPPart = {
 export type KSPCraft = {
 	name: string | null,
 	version: string | null,
-	size: Vec3,
+	size: Vector3,
 	parts: KSPPart[],
 }
 
@@ -96,7 +95,7 @@ export function parseCraftFile( file: string ) {
 	return stack[0]
 }
 
-function parseStringlike( obj: any, key: string ): string | null {
+/*function parseStringlike( obj: any, key: string ): string | null {
 	if( obj[key] && typeof obj[key] === 'string' ) return obj[key]
 
 	return null
@@ -118,7 +117,7 @@ function parseVec3( obj: any, key: string ): Vector3 {
 
 function parseQuat( obj: any, key: string ): Quaternion {
 
-}
+}*/
 
 /**
  * Simplifies a craft file's node hierarchy into a more convenient format, making
@@ -130,8 +129,8 @@ function parseQuat( obj: any, key: string ): Quaternion {
 export function simplifyCraftNodetree( root: CraftFileNode ) {
 	if( root.type !== 'ROOT' ) throw new Error(`Tried to simplify a CraftFileNode of type other than ROOT`)
 
-	const craft: KSPCraft = {
+	/*const craft: KSPCraft = {
 		name: typeof root.attrs.ship === 'string' ? root.attrs.ship : null,
 		version: typeof root.attrs.version === 'string' ? root.attrs.version : null
-	}
+	}*/
 }
