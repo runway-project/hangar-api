@@ -1,11 +1,13 @@
 
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Player } from './Player'
 
+/**
+ * A generic entity, with created_at and modified_at columns, but no other
+ * specific properties.
+ */
 @Entity()
-export class CustomBaseEntity extends BaseEntity {
-
-	@PrimaryGeneratedColumn()
-	_id: number
+export abstract class CustomBaseEntity extends BaseEntity {
 
 	@CreateDateColumn()
 	created_at: Date

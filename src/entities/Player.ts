@@ -1,20 +1,28 @@
 
-import { Entity, Column } from 'typeorm'
-import {CustomBaseEntity} from './Base'
+import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm'
+import { Vessel } from './Vessel'
+import { OwnedBaseEntity } from './OwnedBaseEntity'
 
 @Entity()
-export class Player extends CustomBaseEntity {
+export class Player extends OwnedBaseEntity {
 
-	@Column()
-	discord_id: string
+	@PrimaryColumn()
+	id: string
 
 	@Column()
 	name: string
 
+	@OneToMany(() => Vessel, vessel => vessel.player)
+	vessels: Vessel[]
+
 	constructor( discord_id: string ) {
 		super()
 
-		this.discord_id = discord_id
+		this.id = discord_id
+	}
+
+	async validateOwnership( player: Player ): Promise<boolean> {
+		return player.id === this.id
 	}
 
 }

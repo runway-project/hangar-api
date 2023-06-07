@@ -11,11 +11,13 @@ import { discordOAuth } from './middleware/auth'
 import { addCSP } from './middleware/csp'
 
 import { Player } from './entities/Player'
+import { Vessel } from './entities/Vessel'
+import { Competition } from './entities/Competition'
 
 const db = new DataSource({
 	type: 'sqlite',
 	database: 'dev.sqlite3',
-	entities: [Player],
+	entities: [Player, Vessel, Competition],
 	logging: true,
 	synchronize: process.env.NODE_ENV === 'development',
 })
