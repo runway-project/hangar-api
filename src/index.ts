@@ -44,6 +44,9 @@ app.use(discordOAuth({
 }))
 
 app.use(markoPlugin())
+app.use('/assets', express.static('dist/assets'))
+
+
 
 // Set up client-side stuff with Marko
 /*if( IS_DEV ) {
