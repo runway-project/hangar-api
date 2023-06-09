@@ -6,19 +6,19 @@ import { OwnedBaseEntity } from './OwnedBaseEntity'
 @Entity()
 export class Vessel extends OwnedBaseEntity {
 
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn({ type: 'integer' })
 	id: number
 
 	@ManyToOne(() => Player, player => player.vessels)
 	player: Promise<Player>
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, type: 'varchar' })
     playerId: string
 
-	@Column()
+	@Column({ type: 'varchar' })
 	name: string
 
-	@Column()
+	@Column({ type: 'varchar' })
 	craft_file: string
 
 	async validateOwnership(user: Player): Promise<boolean> {

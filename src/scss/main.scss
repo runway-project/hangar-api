@@ -1,0 +1,21 @@
+
+@use './settings/colors';
+@use './settings/layout';
+@use './settings/typography';
+
+@use './vendor/normalize';
+
+@use './components/l-row';
+@use './components/l-stack';
+
+html {
+	font: 20px/30px Raleway, sans-serif;
+
+	background: var(--color-bg);
+	color: var(--color-text);
+}
+
+a {
+	color: var(--color-link);
+	font-weight: 550;
+}

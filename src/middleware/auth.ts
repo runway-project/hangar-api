@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import fetch from 'node-fetch'
 
 import { Player } from '../entities/Player'
+import { DataSource } from 'typeorm'
 
 export interface UserSession {
 	uid: string,
@@ -35,14 +36,14 @@ export interface DiscordProfileResp {
 /**
  * Adds a basic content security policy header, preventing certain classes of attack
  */
-export function discordOAuth( config: DiscordOAuthConfig ) {
-	return async function(req: Request, resp: Response, next: NextFunction) {
+export function discordOAuth( config: DiscordOAuthConfig, db: DataSource ) {
+	return async function(req: Request, res: Response, next: NextFunction) {
 		
 		// Skip processing this if we're already logged in
 		if( req.session.is_logged_in ) return next()
 
 		// If we haven't received any login info from Discord, continue processing
-		if( ! req.query.code || typeof req.query.code !== 'string' ) return next()
+		if( ! req.query.code || typeof req.query.code !== 'string' ) return res.redirect('https://discord.com/api/oauth2/authorize?client_id=1115728503833370714&redirect_uri=http%3A%2F%2Flocalhost%3A9999&response_type=code&scope=identify')
 
 		// Authenticate the code we received with Discord to log the user in
 		const token_response = await fetch( 'https://discord.com/api/oauth2/token', {
@@ -67,16 +68,23 @@ export function discordOAuth( config: DiscordOAuthConfig ) {
 
 		// Ensure we have the user saved in the DB
 
-		const player = new Player( user.id )
+		if( ! user || ! user.id ) throw new Error(`Attempted to authenticate user, but didn't receive a response from the API!`)
 
-		player.name = user.username
+		const existing_player = await db.manager.findOneBy(Player, { id: req.session.id })
 
-		await player.save()
+		if( ! existing_player ) {
+			const player = new Player( user.id )
+
+			player.name = user.username
+	
+			await player.save()
+		}
 
 		req.session.user = {
 			uid: user.id,
 			discord_username: user.username
 		}
+		req.session.is_logged_in = true
 
 		return next()
 	}

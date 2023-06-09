@@ -6,10 +6,10 @@ import { OwnedBaseEntity } from './OwnedBaseEntity'
 @Entity()
 export class Player extends OwnedBaseEntity {
 
-	@PrimaryColumn()
+	@PrimaryColumn({ type: 'varchar' })
 	id: string
 
-	@Column()
+	@Column({ type: 'varchar' })
 	name: string
 
 	@OneToMany(() => Vessel, vessel => vessel.player)

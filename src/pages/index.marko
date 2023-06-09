@@ -1,0 +1,21 @@
+import { Player } from '../entities/Player'
+
+export interface Input {
+	player: Player
+}
+
+<g-layout title='Home'>
+	<main.l-row.l-stack>
+		<h1>Hangar API</h1>
+		<h2>Hello ${input.player.name}!</h2>
+
+		<p>
+			Placeholder text here. This should be giving info about something idk.
+		</p>
+
+		<div>
+			<a href="/competitions">Look at some competitions</a>
+			<a href="/competitions">Customize your profile</a>
+		</div>
+	</main>
+</g-layout>

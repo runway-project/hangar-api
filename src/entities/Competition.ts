@@ -7,10 +7,10 @@ import { Vessel } from './Vessel'
 @Entity()
 export class Competition extends OwnedBaseEntity {
 
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn({ type: 'integer' })
 	id: number
 
-	@Column()
+	@Column({ type: 'varchar' })
 	name: string
 
 	@ManyToMany(() => Player, {

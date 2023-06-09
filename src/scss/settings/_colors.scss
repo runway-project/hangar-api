@@ -1,0 +1,85 @@
+
+:root {
+	// BASE COLORS
+
+	--color-black: black;
+	--color-white: white;
+
+	// Blues
+	--color-blue-0:  #d9edff;
+	--color-blue-5:  #c6e2ff;
+	--color-blue-10: #b4d7fe;
+	--color-blue-15: #a2ccfd;
+	--color-blue-20: #91c0fd;
+	--color-blue-30: #71a8fa;
+	--color-blue-40: #5792f7;
+	--color-blue-50: #427ff1;
+	--color-blue-60: #316ee8;
+	--color-blue-70: #235cd5;
+	--color-blue-80: #1643a8;
+	--color-blue-90: #0b2562;
+	--color-blue-100: #040e26;
+
+	// Grays
+	--color-gray-0:  #ebf4ff;
+	--color-gray-5:  #dee7f4;
+	--color-gray-10: #d0d9e9;
+	--color-gray-15: #c3ccdd;
+	--color-gray-20: #b7bfd2;
+	--color-gray-30: #9fa6bc;
+	--color-gray-40: #898ea5;
+	--color-gray-50: #74788f;
+	--color-gray-60: #606378;
+	--color-gray-70: #4e5062;
+	--color-gray-80: #3b3d4b;
+	--color-gray-90: #292a35;
+	--color-gray-100: #18181f;
+
+	// Reds
+	--color-red-0:  #ffd4de;
+	--color-red-5:  #f5bcc8;
+	--color-red-10: #eba5b2;
+	--color-red-15: #e0909e;
+	--color-red-20: #d67c8a;
+	--color-red-30: #c25b67;
+	--color-red-40: #ad414b;
+	--color-red-50: #992f36;
+	--color-red-60: #852126;
+	--color-red-70: #70171b;
+	--color-red-80: #5c1113;
+	--color-red-90: #470b0d;
+	--color-red-100: #330808;
+
+	// Greens
+	--color-green-0:  #e4ffde;
+	--color-green-5:  #cef4c7;
+	--color-green-10: #b8e9b1;
+	--color-green-15: #a3de9c;
+	--color-green-20: #8ed389;
+	--color-green-30: #69bd68;
+	--color-green-40: #4fa753;
+	--color-green-50: #3b9142;
+	--color-green-60: #2c7b35;
+	--color-green-70: #21652a;
+	--color-green-80: #185020;
+	--color-green-90: #103a17;
+	--color-green-100: #0a240e;
+
+	// PURPOSE-SPECIFIC
+
+	--color-primary: var(--color-blue-60);
+	
+	--color-text: var(--color-gray-80);
+	--color-bg: var(--color-white);
+	--color-bg-secondary: var(--color-gray-0);
+	--color-link: var(--color-blue-70);
+
+	@media( prefers-color-scheme: dark ) {
+		--color-primary: var(--color-blue-30);
+	
+		--color-text: var(--color-white);
+		--color-bg: var(--color-gray-80);
+		--color-bg-secondary: var(--color-gray-90);
+		--color-link: var(--color-blue-30);
+	}
+}

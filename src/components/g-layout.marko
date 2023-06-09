@@ -1,0 +1,62 @@
+export interface Input {
+	renderBody: Component,
+	title?: string,
+}
+
+style.scss {
+	@use '../scss/main';
+
+	.g-header {
+		background: var(--color-bg-secondary);
+	}
+
+	.g-nav {
+		&__group {
+			list-style: none;
+			margin: unset;
+			padding: unset;
+
+			display: flex;
+			flex-direction: row;
+			gap: 1rem;
+
+			a {
+				display: block;
+
+				text-decoration: none;
+				color: var(--color-text);
+
+				font-size: 1.125rem;
+				font-weight: 600;
+				padding: 0.5rem 0rem;
+			}
+		}
+	}
+}
+
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>${input.title}</title>
+	</head>
+	<body.l-stack--lg>
+		<header.g-header>
+			<nav.g-nav.l-row>
+				<ul.g-nav__group>
+					<li><a href="/">Home</a></li>
+					<li><a href="/competitions">Competitions</a></li>
+					<li><a href="/profile">Profile</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<${input.renderBody}/>
+
+		<footer.g-footer>
+			<div.l-row>The only problem with my Hornet (and of course, it is a perfect plane, a perfect plane in every way, it's the best plane I ever saw) is (and it obviously has a few small problems, of course, that's to be expected, but it's perfect, perfect in every way, absolutely the fastest and best plane ever made, and we have the best planes here, of course, you'd think the german or russian planes are better, but no, our planes are the best, and my Hornet is the best of all of them) the fuel (and of course, the fuel is top quality, made by Americans) drain shifts the COM slightly, so that the peak performance is right at the end of the fuel gauge.</div>
+		</footer>
+	</body>
+</html>

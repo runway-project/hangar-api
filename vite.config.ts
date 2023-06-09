@@ -1,6 +1,6 @@
 import { defineConfig } from "vite"
 import marko from "@marko/vite"
-import typescript from '@rollup/plugin-typescript';
+/*import typescript from '@rollup/plugin-typescript';
 import swc from 'rollup-plugin-swc';
 
 const swcPlugin = (() => {
@@ -26,17 +26,16 @@ const swcPlugin = (() => {
 	};
   
 	return { ...plugin, transform };
-  })();
+  })();*/
 
 export default defineConfig({
 	plugins: [
-		swcPlugin,
+		//swcPlugin,
 		marko()
 	],
 	build: {
 		target: 'es2022',
 		sourcemap: true,
 		emptyOutDir: false,
-	},
-	esbuild: false,
+	}
 })
