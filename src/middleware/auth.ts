@@ -70,14 +70,21 @@ export function discordOAuth( config: DiscordOAuthConfig, db: DataSource ) {
 
 		if( ! user || ! user.id ) throw new Error(`Attempted to authenticate user, but didn't receive a response from the API!`)
 
-		const existing_player = await db.manager.findOneBy(Player, { id: req.session.id })
+		const existing_player = await db.manager.findOneBy(Player, { id: user.id })
 
 		if( ! existing_player ) {
 			const player = new Player( user.id )
 
 			player.name = user.username
+			player.display_name = user.username
 	
 			await player.save()
+		}
+		else {
+			// Update the existing user with whatever the player's most recent Discord username is
+			existing_player.name = user.username
+
+			await existing_player.save()
 		}
 
 		req.session.user = {

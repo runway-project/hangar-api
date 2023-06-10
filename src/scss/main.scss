@@ -7,6 +7,11 @@
 
 @use './components/l-row';
 @use './components/l-stack';
+@use './components/l-flex';
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
 
 html {
 	font: 20px/30px Raleway, sans-serif;

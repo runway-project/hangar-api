@@ -1,0 +1,43 @@
+import { ValidationError } from 'express-validator';
+import { Player } from '../entities/Player'
+
+export interface Input {
+	player: Player,
+	errors?: ValidationError[]
+}
+
+<g-layout title='Your Profile'>
+	<main.l-row.l-stack>
+		<g-form-errors errors=input.errors/>
+
+		<h1>Your Profile</h1>
+
+		<p>
+			Hi, ${input.player.display_name}. There isn't a lot you can do here now, but you can change your display name. At some point, it will also be possible to view competitions you've entered into, stats, and vessels.
+		</p>
+
+		<form.l-stack method="POST">
+			<h2>Change your display name</h2>
+
+			<p>Please note that while you can set your display name to whatever you like, we also store your current Discord name (currently <strong>${input.player.name}</strong>) separately, so we can contact you if there's a problem with your submission.</p>
+
+			<div class="l-flex">
+				<c-input type="text" name="display_name" title="Display Name" value=input.player.display_name wide/>
+
+				<c-button type="submit">
+					Change name
+				</c-button>
+			</div>
+		</form>
+
+		<form.l-stack method="POST" action="/sign-out">
+			<h2>Sign Out</h2>
+
+			<p>Bye! We'll see you soon!</p>
+
+			<c-button type="submit">
+				Sign Out
+			</c-button>
+		</form>
+	</main>
+</g-layout>

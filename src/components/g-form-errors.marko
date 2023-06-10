@@ -1,0 +1,31 @@
+import { ValidationError } from 'express-validator'
+
+export interface Input {
+	errors?: ValidationError[],
+}
+
+style.scss {
+	.g-form-errors {
+		--color-bg: var(--color-red-0);
+		--color-text: var(--color-red-70);
+
+		color: var(--color-text);
+		background: var(--color-bg);
+
+		padding: 1rem;
+	}
+}
+
+<if(input.errors && input.errors.length)>
+	<section.g-form-errors.l-stack>
+		<h2>Whoa, hold up there!</h2>
+
+		<p>There are some validation errors in what you provided. Could you please double-check these fields:</p>
+
+		<ul>
+			<for|error| of=input.errors>
+				<li><strong>${error.path}</strong> ${error.msg}</li>
+			</for>
+		</ul>
+	</section>
+</if>

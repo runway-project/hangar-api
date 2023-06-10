@@ -31,6 +31,23 @@ style.scss {
 				padding: 0.5rem 0rem;
 			}
 		}
+
+		&__title {
+			text-transform: uppercase;
+			font-weight: 900;
+		}
+	}
+
+	.g-content {
+		min-height: calc(100vh - 2.875rem);
+	}
+
+	.g-footer {
+		background: var(--color-bg-secondary);
+		font-size: 0.875rem;
+		font-style: italic;
+
+		padding: var(--body-padding) 0;
 	}
 }
 
@@ -46,6 +63,9 @@ style.scss {
 		<header.g-header>
 			<nav.g-nav.l-row>
 				<ul.g-nav__group>
+					<li>
+						<a.g-nav__title href="/">Hangar API</a>
+					</li>
 					<li><a href="/">Home</a></li>
 					<li><a href="/competitions">Competitions</a></li>
 					<li><a href="/profile">Profile</a></li>
@@ -53,7 +73,9 @@ style.scss {
 			</nav>
 		</header>
 
-		<${input.renderBody}/>
+		<div.g-content>
+			<${input.renderBody}/>
+		</div>
 
 		<footer.g-footer>
 			<div.l-row>The only problem with my Hornet (and of course, it is a perfect plane, a perfect plane in every way, it's the best plane I ever saw) is (and it obviously has a few small problems, of course, that's to be expected, but it's perfect, perfect in every way, absolutely the fastest and best plane ever made, and we have the best planes here, of course, you'd think the german or russian planes are better, but no, our planes are the best, and my Hornet is the best of all of them) the fuel (and of course, the fuel is top quality, made by Americans) drain shifts the COM slightly, so that the peak performance is right at the end of the fuel gauge.</div>

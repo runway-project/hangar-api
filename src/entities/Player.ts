@@ -1,5 +1,5 @@
 
-import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm'
+import { Entity, Column, OneToMany, PrimaryColumn, BeforeUpdate } from 'typeorm'
 import { Vessel } from './Vessel'
 import { OwnedBaseEntity } from './OwnedBaseEntity'
 
@@ -11,6 +11,9 @@ export class Player extends OwnedBaseEntity {
 
 	@Column({ type: 'varchar' })
 	name: string
+
+	@Column({ type: 'varchar' })
+	display_name: string
 
 	@OneToMany(() => Vessel, vessel => vessel.player)
 	vessels: Vessel[]

@@ -1,0 +1,66 @@
+export interface Input {
+	name: string,
+	title: string,
+	type?: 'text' | 'number',
+	value?: string | number,
+	wide?: boolean,
+}
+
+style.scss {
+	.c-input {
+
+		--color-form-field-bg: var(--color-gray-0);
+		--color-form-field-border: var(--color-gray-20);
+
+		position: relative;
+		display: block;
+		
+		padding-top: 1rem;
+
+		@media( prefers-color-scheme: dark ) {
+			--color-form-field-bg: var(--color-gray-90);
+			--color-form-field-border: var(--color-gray-60);
+		}
+
+		&--wide {
+			flex-grow: 1;
+
+			.c-input__input {
+				width: 100%;
+			}
+		}
+
+		&__input {
+			all: inherit;
+			padding: 0.5rem;
+			line-height: 1;
+
+			background: var(--color-form-field-bg);
+			border: 2px solid var(--color-form-field-border);
+
+			&:focus {
+				border-color: var(--color-primary);
+			}
+		}
+
+		&__title {
+			display: block;
+			position: absolute;
+			left: 0.5rem;
+			top: 0rem;
+
+			line-height: 1;
+
+			z-index: 10;
+
+			font-weight: 550;
+		}
+
+	}
+}
+
+<label class=`c-input ${input.wide ? 'c-input--wide' : ''}`>
+	<span.c-input__title>${input.title}</span>
+	<input.c-input__input type=input.type name=input.name value=input.value>
+</label>
+

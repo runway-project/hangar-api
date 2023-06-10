@@ -2,38 +2,25 @@
 import 'dotenv/config'
 //import 'reflect-metadata'
 
-import { DataSource, getRepository } from 'typeorm'
-
-import express from 'express'
+import express, {Request, Response, NextFunction} from 'express'
 import expressSession from 'express-session'
 import compressionMiddlware from 'compression'
-import markoPlugin from '@marko/express'
 import { TypeormStore } from 'connect-typeorm'
 
 import { discordOAuth } from './middleware/auth'
 import { addCSP } from './middleware/csp'
 
-import { Player } from './entities/Player'
-import { Vessel } from './entities/Vessel'
-import { Competition } from './entities/Competition'
-
-import index from './pages/index.marko'
+import { db } from './db'
 import { Session } from './entities/Session'
+
+import { clientRouter } from './routers/client'
+import type StatusCode from './routers/api/types/StatusCode'
 
 console.log(`Starting hangar-api...`)
 console.time('startup')
 
 const PORT = 9999
 const IS_DEV = process.env.NODE_ENV === 'development'
-
-const db = new DataSource({
-	type: 'sqlite',
-	database: 'dev.sqlite3',
-	entities: [Player, Vessel, Competition, Session],
-	logging: true,
-	//synchronize: IS_DEV,
-	synchronize: true,
-})
 
 const app = express()
 
@@ -60,47 +47,21 @@ app.use(discordOAuth({
 	redirect_uri: `http://localhost:${PORT}`,
 }, db))
 
-app.use(markoPlugin())
-app.use('/assets', express.static('dist/assets'))
+// Client
+app.use(clientRouter)
 
 
-// Set up client-side stuff with Marko
-/*if( IS_DEV ) {
-	const { createServer } = await import('vite')
+/**
+ * Global fallback error handler
+ */
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
-	const dev_server = await createServer({
-		appType: 'custom',
-		server: { middlewareMode: true },
-	})
+	console.error(err)
 
-	app.use(dev_server.middlewares)
+	res.statusCode = StatusCode.INTERNAL_SERVER_ERROR
 
-	const layout = await dev_server.ssrLoadModule('./src/layouts/Base.marko')
-
-	console.dir(layout.default)
-	
-	app.get('/', (req, res, next) => {
-		//@ts-ignore
-		res.marko(layout.default, {})
-	})
-
-}
-else {*/
-app.use('/assets', express.static('dist/assets'))
-
-
-//const layout = await import('./layouts/Base.marko')
-//const page = await import('./pages/index.marko')
-
-
-app.get('/', async (req, res, next) => {
-	const player = await db.manager.findOneBy(Player, { id: req.session.user.uid })
-
-	res.marko(index, { player })
+	res.send( err )
 })
-//}
-
-
 
 db.initialize()
 	.then(async () => {
