@@ -68,3 +68,9 @@ clientRouter.post(
 		res.marko(profile, { player: req.player })
 	}
 )
+
+clientRouter.post('/sign-out', async (req, res, next) => {
+	req.session.destroy(() => {
+		res.redirect('/')
+	})
+})

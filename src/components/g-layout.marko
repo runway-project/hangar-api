@@ -11,6 +11,17 @@ style.scss {
 	}
 
 	.g-nav {
+		a {
+			display: block;
+
+			text-decoration: none;
+			color: var(--color-text);
+
+			font-size: 1.125rem;
+			font-weight: 600;
+			padding: 0.5rem 0rem;
+		}
+
 		&__group {
 			list-style: none;
 			margin: unset;
@@ -19,27 +30,16 @@ style.scss {
 			display: flex;
 			flex-direction: row;
 			gap: 1rem;
-
-			a {
-				display: block;
-
-				text-decoration: none;
-				color: var(--color-text);
-
-				font-size: 1.125rem;
-				font-weight: 600;
-				padding: 0.5rem 0rem;
-			}
 		}
 
 		&__title {
 			text-transform: uppercase;
-			font-weight: 900;
+			font-weight: 900 !important;
 		}
 	}
 
 	.g-content {
-		min-height: calc(100vh - 2.875rem);
+		min-height: calc(100vh - 5.875rem);
 	}
 
 	.g-footer {
