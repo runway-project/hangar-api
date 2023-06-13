@@ -1,6 +1,6 @@
 
 import {NextFunction, Request, Response, Router} from 'express'
-import StatusCode from './types/StatusCode'
+import StatusCode from './StatusCode'
 import { acl, Perms } from '../../middleware/acl'
 import { Player } from '../../entities/Player'
 

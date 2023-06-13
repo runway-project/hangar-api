@@ -1,9 +1,10 @@
 
-import { Entity, Column, OneToMany, PrimaryColumn, BeforeUpdate } from 'typeorm'
+import { Entity, Column, OneToMany, PrimaryColumn, Unique } from 'typeorm'
 import { Vessel } from './Vessel'
 import { OwnedBaseEntity } from './OwnedBaseEntity'
 
 @Entity()
+@Unique(['display_name'])
 export class Player extends OwnedBaseEntity {
 
 	@PrimaryColumn({ type: 'varchar' })

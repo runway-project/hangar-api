@@ -12,3 +12,40 @@
 	font-weight: 100 1000;
 	font-style: italic;
 }
+
+h1,h2,h3,h4,h5,h6,
+.u-h1, .u-h2, .u-h3, .u-h4, .u-h5, .u-h6 {
+	margin: unset;
+	line-height: 1.125;
+	font-weight: 700;
+}
+
+h1, .u-h1 {
+	font-size: 2.5rem;
+	font-weight: 900;
+}
+
+h2, .u-h2 {
+	font-size: 2rem;
+}
+
+h3, .u-h3 {
+	font-size: 1.5rem;
+}
+
+h4, .u-h4 {
+	font-size: 1.25rem;
+}
+
+h5, .u-h5 {
+	font-size: 1.125rem;
+}
+
+h6, .u-h6 {
+	font-size: 1rem;
+	text-transform: uppercase;
+}
+
+p {
+	margin: unset;
+}

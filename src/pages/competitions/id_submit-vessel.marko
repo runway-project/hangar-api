@@ -1,0 +1,35 @@
+import { ValidationError } from 'express-validator'
+
+import { Player } from '../../entities/Player'
+import { Competition } from '../../entities/Competition'
+import { Vessel } from '../../entities/Vessel'
+
+export interface Input {
+	player: Player,
+	competition: Competition,
+	errors?: ValidationError[]
+}
+
+style.scss {
+	
+}
+
+<g-layout title='Competitions'>
+	<main.l-row.l-stack>
+		<g-form-errors errors=input.errors/>
+
+		<h1>${input.competition.name}</h1>
+
+		<form.l-stack method="POST" enctype="multipart/form-data">
+			<h2>Submit a Craft</h2>
+
+			<p>Let us know the details of your vessel below</p>
+
+			<c-input name="name" type="text" title="Vessel Name" wide required/>
+
+			<input type="file" name="craft_file" style="display: block;" accept=".craft" required>
+
+			<c-button type="submit">Submit</c-button>
+		</form>
+	</main>
+</g-layout>

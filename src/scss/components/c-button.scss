@@ -1,0 +1,26 @@
+.c-button {
+	all: inherit;
+
+	display: inline-block;
+
+	--color-bg: var(--color-blue-70);
+	--color-text: var(--color-white);
+
+	padding: 0.5rem 1rem;
+	background: var(--color-bg);
+	color: var(--color-text);
+
+	font-weight: 650;
+
+	line-height: 1;
+
+	cursor: pointer;
+
+	&:hover, &:focus {
+		background: var(--color-blue-50);
+	}
+
+	&:active {
+		background: var(--color-blue-40);
+	}
+}

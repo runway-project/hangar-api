@@ -1,0 +1,49 @@
+import { Player } from '../../entities/Player'
+import { Competition } from '../../entities/Competition'
+
+export interface Input {
+	player: Player,
+	competitions: Competition[]
+}
+
+style.scss {
+	.c-comp-details {
+		background: var(--color-bg-secondary);
+		border-radius: 1rem;
+		padding: 1rem;
+	}
+}
+
+<g-layout title='Competitions'>
+	<main.l-row.l-stack>
+		<h1>Competitions</h1>
+
+		<p>
+			Here are all of the currently-active competitions.
+		</p>
+
+		<div>
+			<a.c-button href="/competitions/new">
+				Create a new Competition
+			</a>
+		</div>
+
+		<h2>🚀 Active Competitions</h2>
+
+		<form>
+			<c-input type="text" name="search" title="Search for a Competition" wide/>
+		</form>
+
+		<for|competition| of=input.competitions>
+			<section.c-comp-details>
+				<h3>${competition.name} (${competition.status})</h3>
+
+				<p>
+					Created by ${competition.organizers.map(player => player.display_name).join(', ')}
+				</p>
+
+				<a.c-button href=`/competitions/${competition.id}`>View</a>
+			</section>
+		</for>
+	</main>
+</g-layout>

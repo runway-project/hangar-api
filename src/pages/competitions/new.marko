@@ -1,0 +1,33 @@
+import { ValidationError } from 'express-validator'
+
+import { Player } from '../../entities/Player'
+import { Competition } from '../../entities/Competition'
+
+export interface Input {
+	player: Player,
+	competitions: Competition[],
+	errors?: ValidationError[]
+}
+
+style.scss {
+	
+}
+
+
+<g-layout title='Competitions'>
+	<main.l-row.l-stack>
+		<g-form-errors errors=input.errors/>
+
+		<h1>Start a new Competition</h1>
+
+		<p>Documentation to be written</p>
+
+		<form.l-stack method="POST">
+			<c-input type="text" name="name" title="Competition Name" wide/>
+
+			<c-button type="submit">
+				Create
+			</c-button>
+		</form>
+	</main>
+</g-layout>

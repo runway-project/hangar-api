@@ -5,6 +5,7 @@ import 'dotenv/config'
 import express, {Request, Response, NextFunction} from 'express'
 import expressSession from 'express-session'
 import compressionMiddlware from 'compression'
+import rateLimit from 'express-rate-limit'
 import { TypeormStore } from 'connect-typeorm'
 
 import { discordOAuth } from './middleware/auth'
@@ -14,7 +15,7 @@ import { db } from './db'
 import { Session } from './entities/Session'
 
 import { clientRouter } from './routers/client'
-import type StatusCode from './routers/api/types/StatusCode'
+import StatusCode from './routers/api/StatusCode'
 
 console.log(`Starting hangar-api...`)
 console.time('startup')
@@ -24,8 +25,20 @@ const IS_DEV = process.env.NODE_ENV === 'development'
 
 const app = express()
 
+// Gzip response bodies
 app.use(compressionMiddlware())
 
+// Set up basic, global rate limiting.
+// TODO: Set up something like Redis to track this info
+app.use(rateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 100,
+	standardHeaders: false,
+	legacyHeaders: false,
+	message: `Too many requests in too short a timeframe.`
+}))
+
+// Cookie-based session middleware
 app.use(expressSession({
 	secret: process.env.COOKIE_SECRET,
 	cookie: {
@@ -40,19 +53,25 @@ app.use(expressSession({
 	}).connect( db.getRepository(Session) ),
 }))
 
+// Set up content-security-policy headers, to mitigate some types of attack
 app.use(addCSP)
+
+// Require that all users accessing the site be authenticated with Discord.
+// TODO: Refactor this to allow some public routes, while still login-gating
+// stuff like forms.
 app.use(discordOAuth({
 	client_id: process.env.DISCORD_CLIENT_ID,
 	client_secret: process.env.DISCORD_CLIENT_SECRET,
 	redirect_uri: `http://localhost:${PORT}`,
 }, db))
 
-// Client
+// Client routes
 app.use(clientRouter)
 
 
 /**
- * Global fallback error handler
+ * Global fallback error handler, if no other route has provided a valid error
+ * handler.
  */
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
@@ -63,6 +82,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 	res.send( err )
 })
 
+// Wait for the DB connection to complete before accepting connections
 db.initialize()
 	.then(async () => {
 		app.listen(PORT, '127.0.0.1', () => {

@@ -9,6 +9,8 @@
 @use './components/l-stack';
 @use './components/l-flex';
 
+@use './components/c-button';
+
 *, *::before, *::after {
 	box-sizing: border-box;
 }
