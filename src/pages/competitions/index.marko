@@ -28,12 +28,6 @@ style.scss {
 			</a>
 		</div>
 
-		<h2>🚀 Active Competitions</h2>
-
-		<form>
-			<c-input type="text" name="search" title="Search for a Competition" wide/>
-		</form>
-
 		<for|competition| of=input.competitions>
 			<section.c-comp-details>
 				<h3>${competition.name} (${competition.status})</h3>

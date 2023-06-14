@@ -8,8 +8,11 @@
 @use './components/l-row';
 @use './components/l-stack';
 @use './components/l-flex';
+@use './components/l-grid';
 
 @use './components/c-button';
+@use './components/c-input';
+@use './components/c-panel';
 
 *, *::before, *::after {
 	box-sizing: border-box;

@@ -1,0 +1,24 @@
+
+@use 'sass:map';
+@use '../mixins/responsive';
+
+.l-grid {
+	display: grid;
+	grid-template-columns: repeat(var(--grid-columns), 1fr);
+	gap: 1rem;
+
+	@for $i from 2 to 12 {
+		&--#{$i} {
+			--grid-columns: #{$i};
+		}
+	}
+
+	@each $breakpoint, $_ in responsive.$breakpoints {
+		&--break-when-#{$breakpoint} {
+			@include responsive.when($breakpoint) {
+				display: block;
+			}
+		}
+	}
+
+}

@@ -1,5 +1,7 @@
 import { defineConfig } from "vite"
 import marko from "@marko/vite"
+import svgLoader from 'vite-svg-loader'
+
 /*import typescript from '@rollup/plugin-typescript';
 import swc from 'rollup-plugin-swc';
 
@@ -30,8 +32,10 @@ const swcPlugin = (() => {
 
 export default defineConfig({
 	plugins: [
-		//swcPlugin,
-		marko()
+		svgLoader({
+			defaultImport: 'raw',
+		}),
+		marko(),
 	],
 	build: {
 		target: 'es2022',

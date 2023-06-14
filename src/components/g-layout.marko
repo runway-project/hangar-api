@@ -1,3 +1,7 @@
+
+import rwp_logo from '../assets/svg/rwp-logo.svg'
+import hangar_api_logo from '../assets/svg/hangar-api-logo.svg'
+
 export interface Input {
 	renderBody: Component,
 	title?: string,
@@ -44,10 +48,24 @@ style.scss {
 
 	.g-footer {
 		background: var(--color-bg-secondary);
-		font-size: 0.875rem;
-		font-style: italic;
+		padding: var(--column-padding) 0;
 
-		padding: var(--body-padding) 0;
+		&__logos {
+			flex-grow: 1;
+
+			> svg {
+				display: block;
+
+				max-width: 10rem;
+				height: auto;
+			}
+		}
+
+		&__copypasta {
+			opacity: 0.75;
+			font-size: 0.875rem;
+			font-style: italic;
+		}
 	}
 }
 
@@ -77,8 +95,20 @@ style.scss {
 			<${input.renderBody}/>
 		</div>
 
-		<footer.g-footer>
-			<div.l-row>The only problem with my Hornet (and of course, it is a perfect plane, a perfect plane in every way, it's the best plane I ever saw) is (and it obviously has a few small problems, of course, that's to be expected, but it's perfect, perfect in every way, absolutely the fastest and best plane ever made, and we have the best planes here, of course, you'd think the german or russian planes are better, but no, our planes are the best, and my Hornet is the best of all of them) the fuel (and of course, the fuel is top quality, made by Americans) drain shifts the COM slightly, so that the peak performance is right at the end of the fuel gauge.</div>
+		<footer.g-footer.l-stack>
+			<div.l-row.l-flex>
+				<section.g-footer__logos.l-flex style="gap: 1rem;">
+					$!{hangar_api_logo}
+					$!{rwp_logo}
+				</section>
+				<section>
+					<a href="https://discord.gg/czpYcVHK">Join us on Discord</a>
+				</section>
+			</div>
+
+			<div.l-row.g-footer__copypasta>
+				The only problem with my Hornet (and of course, it is a perfect plane, a perfect plane in every way, it's the best plane I ever saw) is (and it obviously has a few small problems, of course, that's to be expected, but it's perfect, perfect in every way, absolutely the fastest and best plane ever made, and we have the best planes here, of course, you'd think the german or russian planes are better, but no, our planes are the best, and my Hornet is the best of all of them) the fuel (and of course, the fuel is top quality, made by Americans) drain shifts the COM slightly, so that the peak performance is right at the end of the fuel gauge.
+			</div>
 		</footer>
 	</body>
 </html>

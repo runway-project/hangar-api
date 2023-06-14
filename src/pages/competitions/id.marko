@@ -11,6 +11,8 @@ export interface Input {
 	errors?: ValidationError[]
 }
 
+$ const is_comp_owner = input.competition.validateOwnership( input.player )
+
 style.scss {
 	
 }
@@ -21,6 +23,22 @@ style.scss {
 
 		<h1>${input.competition.name}</h1>
 
+		<await(is_comp_owner)>
+			<@then|v|>
+				<if(v)>
+					<section.c-panel.l-stack>
+						<h2>Organizer Controls</h2>
+
+						<form action=`/competitions/${input.competition.id}/set-stage` method="POST">
+							<input type="hidden" name="stage" value="">
+
+							<c-button type="submit">Close Submissions</c-button>
+						</form>
+					</section>
+				</if>
+			</@then>
+		</await>
+
 		<p>Created by ${input.competition.organizers.map(player => player.display_name).join(', ')}</p>
 
 		<div>
@@ -29,14 +47,14 @@ style.scss {
 
 		<h2>Entries</h2>
 
-		<a href=`/competitions/${input.competition.id}/submit-vessel`>Submit a Vessel</a>
+		<a.c-button href=`/competitions/${input.competition.id}/submit-vessel`>Submit a Vessel</a>
 
 		<ul>
 			<await(input.competition.vessels)>
 				<@then|vessels|>
 					<for|vessel| of=vessels ?? []>
 						<li>
-							${vessel.player.name} - ${vessel.name}
+							${vessel.player.display_name} - ${vessel.name}
 							<if(vessel.player.id === input.player.id)>
 								<em> (This is your submission. The craft file is ${vessel.craft_file})</em>
 							</if>

@@ -1,4 +1,5 @@
 import { Player } from '../entities/Player'
+import hangar_api_logo from '../assets/svg/hangar-api-logo.svg'
 
 export interface Input {
 	player: Player
@@ -6,16 +7,36 @@ export interface Input {
 
 <g-layout title='Home'>
 	<main.l-row.l-stack>
-		<h1>Hangar API</h1>
-		<h2>Hello ${input.player.name}!</h2>
+		$!{hangar_api_logo}
 
-		<p>
-			Placeholder text here. This should be giving info about something idk.
-		</p>
+		<h1>Hello ${input.player.display_name}!</h1>
 
-		<div>
-			<a.c-button href="/competitions">Look at some competitions</a>
-			<a.c-button href="/competitions">Customize your profile</a>
+		<p>Well, this is a bit of a work-in-progress. We're still adding features, but in the meantime, here are a few things you can currently do:</p>
+
+		<div.l-grid.l-grid--3.l-grid--gap-1>
+			<section.c-panel.l-stack--sm>
+				<h2.u-h5>Browse Competitions</h2>
+
+				<p>Check out our community-organized KSP BDA competitions</p>
+
+				<div><a.c-button href="/competitions">Go</a></div>
+			</section>
+
+			<section.c-panel.l-stack--sm>
+				<h2.u-h5>Start a new competition</h2>
+
+				<p>Create your own competition</p>
+
+				<div><a.c-button href="/competitions/new">Go</a></div>
+			</section>
+
+			<section.c-panel.l-stack--sm>
+				<h2.u-h5>Change your display name</h2>
+
+				<p>Or change other settings on your profile</p>
+
+				<div><a.c-button href="/profile">Go</a></div>
+			</section>
 		</div>
 	</main>
 </g-layout>
