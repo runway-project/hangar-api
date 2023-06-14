@@ -2,6 +2,7 @@
 import express, {NextFunction, Request, Response, Router} from 'express'
 import markoPlugin from '@marko/express'
 import sirv from 'sirv'
+import NodeBuffer from 'node:buffer'
 
 import bodyParser from 'body-parser'
 import { body, validationResult } from 'express-validator'
@@ -9,7 +10,10 @@ import multer, {memoryStorage} from 'multer'
 
 import { db } from '../../db'
 import { Player } from '../../entities/Player'
-import { Competition } from '../../entities/Competition'
+import { Competition, CompetitionState } from '../../entities/Competition'
+import { Vessel } from '../../entities/Vessel'
+
+import { saveCraftFile, loadCraftFile } from '../../utils/craft-file'
 
 import index from '../../pages/index.marko'
 import profile from '../../pages/profile.marko'
@@ -33,6 +37,11 @@ clientRouter.use(bodyParser.urlencoded({
 }))
 
 const file_parser = multer({
+	limits: {
+		fileSize: 1024 * 1024, // 1 MB
+		files: 1,
+		fieldSize: 1024 * 10, // 10 KB
+	},
 	storage: memoryStorage(),
 })
 
@@ -152,8 +161,6 @@ clientRouter.get('/competitions/:id/submit-vessel', async (req: Request, res: Re
 clientRouter.post(
 	'/competitions/:id/submit-vessel',
 
-	body('name').isLength({ min: 2, max: 50 }).trim().escape(),
-
 	file_parser.single('craft_file'),
 
 	async (req: Request, res: Response, next) => {
@@ -161,18 +168,51 @@ clientRouter.post(
 
 		if( ! comp ) return res.redirect('/404')
 
-		const result = validationResult(req)
+		if( comp.status !== CompetitionState.ACCEPTING_SUBMISSIONS ) throw new Error(`Competition is not accepting submissions`)
 
-		if( ! result.isEmpty() ) {
-			return res.marko(competition_submit_vessel, { player: req.player, errors: result.array() })
-		}
+		// Do some validation
+		if( ! req.file?.buffer ) throw new Error(`Craft file must be present`)
+		if( ! NodeBuffer.isUtf8( req.file.buffer ) ) throw new Error(`Craft file must contain only valid UTF-8 characters`)
+		if( ! req.body?.name || req.body.name.length < 2 || req.body.name.length > 50 ) throw new Error(`Craft name must be between 2 and 50 characters`)
 
 		// Handle craft file stuff
-		const raw_craft_file = req.file
+		const original_filename = req.file.originalname
+		const craft_file_buffer = req.file.buffer
+		const craft_name = req.body.name
 
-		console.log({ raw_craft_file })
+		const craft_file = craft_file_buffer.toString('utf-8')
 
-		res.marko(competition_submit_vessel, { player: req.player, competition: comp })
+		// Wrap everything in a transaction so we'll be able to roll back if there
+		// are any problems
+		await db.manager.transaction( async manager => {
+
+			// Check whether another vessel with the specified name exists
+			let vessel = await manager.findOneBy(Vessel, { name: craft_name, playerId: req.player.id, competitionId: comp.id })
+
+			// Create a vessel instance if it doesn't exist already
+			if( ! vessel ) vessel = new Vessel()
+
+			vessel.name = craft_name
+
+			vessel.player = req.player
+			vessel.craft_file = original_filename
+			vessel.competition = Promise.resolve(comp)
+			vessel.competitionId = comp.id
+			
+			await vessel.save()
+
+			// Associate the vessel with the comp
+			comp.vessels = [...comp.vessels, vessel]
+
+			await comp.save()
+
+			console.log(vessel)
+
+			// Save the craft file to disk only after the above steps have finished
+			await saveCraftFile( vessel, craft_file )
+		})
+
+		res.redirect(`/competitions/${req.params.id}`)
 	}
 )
 

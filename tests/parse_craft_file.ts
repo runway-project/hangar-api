@@ -1,6 +1,6 @@
 
 import { readFile, writeFile } from 'fs/promises'
-import { parseCraftFile } from '../src/utils/craft-file'
+import { parseCraftFile, simplifyCraftNodetree } from '../src/utils/craft-file'
 
 async function main() {
 	const DEMO_CRAFT_FILE = 'tests/data/Eclipse_S5R9_A.craft'
@@ -22,6 +22,14 @@ async function main() {
 	await writeFile( 'tests/parsed_craft.json', JSON.stringify(parsed, null, '\t'), {encoding: 'utf-8'} )
 	
 	console.timeEnd('write')
+
+	console.time('simplify')
+
+	const simplified = simplifyCraftNodetree( parsed )
+
+	console.timeEnd('simplify')
+
+	await writeFile( 'tests/simplified_craft.json', JSON.stringify(simplified, null, '\t'), {encoding: 'utf-8'} )
 }
 
 main()

@@ -1,5 +1,5 @@
 
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinTable, ManyToMany, Unique } from 'typeorm'
+import { Entity, Column, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinTable, ManyToMany, Unique, AfterLoad } from 'typeorm'
 import { Player } from './Player'
 import { OwnedBaseEntity } from './OwnedBaseEntity'
 import { Vessel } from './Vessel'
@@ -27,16 +27,12 @@ export class Competition extends OwnedBaseEntity {
 	@Column({ type: 'text', nullable: true })
 	description: string
 
-	@ManyToMany(() => Player, {
-		eager: true,
-		cascade: true,
-	})
-	@JoinTable({ name: 'competition_organizers' })
+	@ManyToMany(() => Player, { eager: true })
+	@JoinTable()
 	organizers: Player[]
 
-	@ManyToMany(() => Vessel)
-	@JoinTable({ name: 'competition_entrants' })
-	vessels: Promise<Vessel[]>
+	@OneToMany(() => Vessel, vessel => vessel.competition, { eager: true })
+	vessels: Vessel[]
 
 	@Column({ type: 'varchar', enum: Object.values(CompetitionState) })
 	status: CompetitionState = CompetitionState.ACCEPTING_SUBMISSIONS

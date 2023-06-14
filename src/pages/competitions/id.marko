@@ -35,7 +35,12 @@ style.scss {
 			<await(input.competition.vessels)>
 				<@then|vessels|>
 					<for|vessel| of=vessels ?? []>
-						<li>${vessel.name}</li>
+						<li>
+							${vessel.player.name} - ${vessel.name}
+							<if(vessel.player.id === input.player.id)>
+								<em> (This is your submission. The craft file is ${vessel.craft_file})</em>
+							</if>
+						</li>
 					</for>
 				</@then>
 			</await>
