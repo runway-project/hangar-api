@@ -62,7 +62,7 @@ app.use(addCSP)
 app.use(discordOAuth({
 	client_id: process.env.DISCORD_CLIENT_ID,
 	client_secret: process.env.DISCORD_CLIENT_SECRET,
-	redirect_uri: `http://localhost:${PORT}`,
+	redirect_uri: process.env.SITE_URL,
 }, db))
 
 // Client routes

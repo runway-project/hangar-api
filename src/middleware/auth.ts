@@ -43,7 +43,8 @@ export function discordOAuth( config: DiscordOAuthConfig, db: DataSource ) {
 		if( req.session.is_logged_in ) return next()
 
 		// If we haven't received any login info from Discord, continue processing
-		if( ! req.query.code || typeof req.query.code !== 'string' ) return res.redirect('https://discord.com/api/oauth2/authorize?client_id=1115728503833370714&redirect_uri=http%3A%2F%2Flocalhost%3A9999&response_type=code&scope=identify')
+		if( ! req.query.code || typeof req.query.code !== 'string' )
+			return res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${config.client_id}&redirect_uri=${encodeURIComponent( config.redirect_uri )}&response_type=code&scope=identify`)
 
 		// Authenticate the code we received with Discord to log the user in
 		const token_response = await fetch( 'https://discord.com/api/oauth2/token', {
