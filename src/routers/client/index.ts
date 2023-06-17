@@ -150,6 +150,61 @@ clientRouter.get('/competitions/:id', async (req: Request, res: Response, next) 
 	res.marko(competition, { player: req.player, competition: comp })
 })
 
+clientRouter.post(
+	'/competitions/:id',
+
+	body('name').isLength({ min: 2, max: 80 }).trim().escape(),
+	body('remote_orchestration_password').isLength({ min: 2, max: 200 }).trim().escape(),
+	body('description').isLength({ min: 2, max: 4096 }).trim().escape(),
+
+	async (req: Request, res: Response, next) => {
+		const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
+
+		if( ! comp ) return res.redirect('/404')
+		if( ! comp.validateOwnership( req.player ) ) throw new Error(`Permission denied`)
+
+		const result = validationResult(req)
+
+		if( ! result.isEmpty() ) {
+			return res.marko(competition, { player: req.player, competition: comp, errors: result.array() })
+		}
+
+		comp.name = req.body.name
+		comp.description = req.body.description
+		comp.remote_orchestration_password = req.body.remote_orchestration_password
+
+		await comp.save()
+
+
+		res.marko(competition, { player: req.player, competition: comp })
+	}
+)
+
+clientRouter.post(
+	'/competitions/:id/set-stage',
+
+	body('stage').isIn(['closed', 'accepting_submissions']),
+
+	async (req: Request, res: Response, next) => {
+		const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
+
+		if( ! comp ) return res.redirect('/404')
+		if( ! comp.validateOwnership( req.player ) ) throw new Error(`Permission denied`)
+
+		const result = validationResult(req)
+
+		if( ! result.isEmpty() ) {
+			return res.marko(competition, { player: req.player, competition: comp, errors: result.array() })
+		}
+
+		comp.status = req.body.stage
+
+		await comp.save()
+
+		res.marko(competition, { player: req.player, competition: comp })
+	}
+)
+
 clientRouter.get('/competitions/:id/submit-vessel', async (req: Request, res: Response, next) => {
 	const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
 

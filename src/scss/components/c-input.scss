@@ -1,17 +1,9 @@
 .c-input {
 
-	--color-form-field-bg: var(--color-gray-0);
-	--color-form-field-border: var(--color-gray-20);
-
 	position: relative;
 	display: block;
 	
 	padding-top: 1rem;
-
-	@media( prefers-color-scheme: dark ) {
-		--color-form-field-bg: var(--color-gray-90);
-		--color-form-field-border: var(--color-gray-60);
-	}
 
 	&--wide {
 		flex-grow: 1;

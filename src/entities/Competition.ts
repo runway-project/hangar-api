@@ -3,6 +3,7 @@ import { Entity, Column, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinTable
 import { Player } from './Player'
 import { OwnedBaseEntity } from './OwnedBaseEntity'
 import { Vessel } from './Vessel'
+import { generatePassphrase } from '../utils/passphrase'
 
 /**
  * What stage is the current competition in?
@@ -37,10 +38,20 @@ export class Competition extends OwnedBaseEntity {
 	@Column({ type: 'varchar', enum: Object.values(CompetitionState) })
 	status: CompetitionState = CompetitionState.ACCEPTING_SUBMISSIONS
 
+	@Column({ type: 'varchar' })
+	remote_orchestration_password: string
+
+	constructor() {
+		super()
+
+		// Set a default password if none is specified
+		if( ! this.remote_orchestration_password )
+			this.remote_orchestration_password = generatePassphrase(2)
+	}
+
 	async validateOwnership(user: Player): Promise<boolean> {
 		const matching_owner = this.organizers.find( organizer => organizer.id === user.id )
 
 		return !! matching_owner
 	}
-
 }

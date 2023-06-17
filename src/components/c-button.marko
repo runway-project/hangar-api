@@ -1,13 +1,14 @@
 export interface Input {
 	type?: 'button' | 'submit',
 	renderBody: Component,
+	success: boolean,
+	danger: boolean,
 }
 
 style.scss {
 
 }
 
-<button.c-button type=input.type ?? 'button'>
+<button class=`c-button ${input.success ? 'c-button--success' : ''} ${input.danger ? 'c-button--danger' : ''}` type=input.type ?? 'button'>
 	<${input.renderBody}/>
 </button>
-

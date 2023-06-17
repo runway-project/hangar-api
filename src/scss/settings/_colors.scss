@@ -74,6 +74,9 @@
 	--color-bg-secondary: var(--color-gray-0);
 	--color-link: var(--color-blue-70);
 
+	--color-form-field-bg: var(--color-gray-0);
+	--color-form-field-border: var(--color-gray-20);
+
 	@media( prefers-color-scheme: dark ) {
 		--color-primary: var(--color-blue-30);
 	
@@ -81,5 +84,8 @@
 		--color-bg: var(--color-gray-80);
 		--color-bg-secondary: var(--color-gray-90);
 		--color-link: var(--color-blue-30);
+
+		--color-form-field-bg: var(--color-gray-90);
+		--color-form-field-border: var(--color-gray-60);
 	}
 }

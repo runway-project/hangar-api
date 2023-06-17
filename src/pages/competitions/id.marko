@@ -2,7 +2,7 @@ import { ValidationError } from 'express-validator'
 import {parse} from 'marked'
 
 import { Player } from '../../entities/Player'
-import { Competition } from '../../entities/Competition'
+import { Competition, CompetitionState } from '../../entities/Competition'
 import { Vessel } from '../../entities/Vessel'
 
 export interface Input {
@@ -14,7 +14,43 @@ export interface Input {
 $ const is_comp_owner = input.competition.validateOwnership( input.player )
 
 style.scss {
-	
+	// TODO: refactor this out to its own component
+	.c-textarea {
+		display: block;
+
+		&__label {
+			display: block;
+			padding-left: 0.5rem;
+
+			line-height: 1;
+
+			font-weight: 650;
+			font-size: 0.875rem;
+		}
+
+		&__input {
+			all: inherit;
+
+			display: block;
+
+			min-width: 100%;
+			max-width: 100%;
+
+			min-height: 8rem;
+
+			padding: 0.5rem;
+			margin-top: 0.125rem;
+
+			background: var(--color-bg-secondary);
+			border: 2px solid var(--color-form-field-border);
+
+			font-family: monospace;
+
+			&:focus {
+				border-color: var(--color-primary);
+			}
+		}
+	}
 }
 
 <g-layout title='Competitions'>
@@ -29,10 +65,32 @@ style.scss {
 					<section.c-panel.l-stack>
 						<h2>Organizer Controls</h2>
 
+						<!-- Controls for updating the current state -->
 						<form action=`/competitions/${input.competition.id}/set-stage` method="POST">
-							<input type="hidden" name="stage" value="">
+							<if(input.competition.status === CompetitionState.ACCEPTING_SUBMISSIONS)>
+								<input type="hidden" name="stage" value="closed">
 
-							<c-button type="submit">Close Submissions</c-button>
+								<c-button type="submit" danger>Close Submissions</c-button>
+							</if>
+							<if(input.competition.status === CompetitionState.CLOSED)>
+								<input type="hidden" name="stage" value="accepting_submissions">
+
+								<c-button type="submit" danger>Re-open Submissions</c-button>
+							</if>
+						</form>
+
+						<!-- Controls for updating comp settings -->
+						<form.l-stack action=`/competitions/${input.competition.id}` method="POST">
+							<c-input type="text" name="name" title="Competition Name" value=input.competition.name wide/>
+
+							<c-input type="text" name="remote_orchestration_password" title="Remote Orchestration Password" value=input.competition.remote_orchestration_password wide/>
+
+							<label.c-textarea>
+								<strong.c-textarea__label>Description (accepts Markdown)</strong>
+								<textarea.c-textarea__input name="description">${input.competition.description}</textarea>
+							</label>
+
+							<c-button type="submit">Update Settings</c-button>
 						</form>
 					</section>
 				</if>
@@ -47,7 +105,9 @@ style.scss {
 
 		<h2>Entries</h2>
 
-		<a.c-button href=`/competitions/${input.competition.id}/submit-vessel`>Submit a Vessel</a>
+		<if(input.competition.status === CompetitionState.ACCEPTING_SUBMISSIONS)>
+			<a.c-button href=`/competitions/${input.competition.id}/submit-vessel`>Submit a Vessel</a>
+		</if>
 
 		<ul>
 			<await(input.competition.vessels)>

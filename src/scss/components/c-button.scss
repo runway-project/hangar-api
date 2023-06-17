@@ -4,6 +4,8 @@
 	display: inline-block;
 
 	--color-bg: var(--color-blue-70);
+	--color-bg-focus: var(--color-blue-50);
+	--color-bg-active: var(--color-blue-40);
 	--color-text: var(--color-white);
 
 	padding: 0.5rem 1rem;
@@ -16,11 +18,23 @@
 
 	cursor: pointer;
 
+	&--danger {
+		--color-bg: var(--color-red-60);
+		--color-bg-focus: var(--color-red-50);
+		--color-bg-active: var(--color-red-40);
+	}
+
+	&--success {
+		--color-bg: var(--color-green-60);
+		--color-bg-focus: var(--color-green-50);
+		--color-bg-active: var(--color-green-40);
+	}
+
 	&:hover, &:focus {
-		background: var(--color-blue-50);
+		background: var(--color-bg-focus);
 	}
 
 	&:active {
-		background: var(--color-blue-40);
+		background: var(--color-bg-active);
 	}
 }
