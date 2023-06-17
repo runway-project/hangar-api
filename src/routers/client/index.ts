@@ -161,7 +161,7 @@ clientRouter.post(
 		const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
 
 		if( ! comp ) return res.redirect('/404')
-		if( ! comp.validateOwnership( req.player ) ) throw new Error(`Permission denied`)
+		if( ! comp.validateOwnership( req.player ) ) return next( new Error(`Permission denied`) )
 
 		const result = validationResult(req)
 
@@ -189,7 +189,7 @@ clientRouter.post(
 		const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
 
 		if( ! comp ) return res.redirect('/404')
-		if( ! comp.validateOwnership( req.player ) ) throw new Error(`Permission denied`)
+		if( ! comp.validateOwnership( req.player ) ) return next( new Error(`Permission denied`) )
 
 		const result = validationResult(req)
 
@@ -223,12 +223,12 @@ clientRouter.post(
 
 		if( ! comp ) return res.redirect('/404')
 
-		if( comp.status !== CompetitionState.ACCEPTING_SUBMISSIONS ) throw new Error(`Competition is not accepting submissions`)
+		if( comp.status !== CompetitionState.ACCEPTING_SUBMISSIONS ) return next( new Error(`Competition is not accepting submissions`) )
 
 		// Do some validation
-		if( ! req.file?.buffer ) throw new Error(`Craft file must be present`)
-		if( ! NodeBuffer.isUtf8( req.file.buffer ) ) throw new Error(`Craft file must contain only valid UTF-8 characters`)
-		if( ! req.body?.name || req.body.name.length < 2 || req.body.name.length > 50 ) throw new Error(`Craft name must be between 2 and 50 characters`)
+		if( ! req.file?.buffer ) return next( new Error(`Craft file must be present`) )
+		if( ! NodeBuffer.isUtf8( req.file.buffer ) ) return next( new Error(`Craft file must contain only valid UTF-8 characters`) )
+		if( ! req.body?.name || req.body.name.length < 2 || req.body.name.length > 50 ) return next( new Error(`Craft name must be between 2 and 50 characters`) )
 
 		// Handle craft file stuff
 		const original_filename = req.file.originalname

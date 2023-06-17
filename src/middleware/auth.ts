@@ -69,7 +69,7 @@ export function discordOAuth( config: DiscordOAuthConfig, db: DataSource ) {
 
 		// Ensure we have the user saved in the DB
 
-		if( ! user || ! user.id ) throw new Error(`Attempted to authenticate user, but didn't receive a response from the API!`)
+		if( ! user || ! user.id ) return next( new Error(`Attempted to authenticate user, but didn't receive a response from the API!`) )
 
 		const existing_player = await db.manager.findOneBy(Player, { id: user.id })
 
