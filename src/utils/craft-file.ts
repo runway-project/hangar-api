@@ -313,11 +313,12 @@ export function getSafeCraftFileName( craft: Vessel ) {
  */
 export async function saveCraftFile( craft: Vessel, craft_file: string ) {
 	const filename = getSafeCraftFileName( craft )
+	const comp_ip = encodeURIComponent( (await craft.competition).id)
 
 	// Ensure the craft file storage path exists
-	await mkdir( join(CRAFT_STORAGE_PATH, encodeURIComponent( (await craft.competition).id) ), { recursive: true } )
+	await mkdir( join(CRAFT_STORAGE_PATH, comp_ip), { recursive: true } )
 
-	await writeFile( join(CRAFT_STORAGE_PATH, filename), craft_file, { encoding: 'utf-8' } )
+	await writeFile( join(CRAFT_STORAGE_PATH, comp_ip, filename), craft_file, { encoding: 'utf-8' } )
 }
 
 /**
@@ -325,8 +326,9 @@ export async function saveCraftFile( craft: Vessel, craft_file: string ) {
  */
 export async function loadCraftFile( craft: Vessel ) {
 	const filename = getSafeCraftFileName( craft )
+	const comp_ip = encodeURIComponent( (await craft.competition).id)
 
-	if( ! (await stat( join( CRAFT_STORAGE_PATH, encodeURIComponent((await craft.competition).id), filename ) )).isFile() ) throw new Error(`Unable to find craft file ${filename}`)
+	if( ! (await stat( join( CRAFT_STORAGE_PATH, comp_ip, filename ) )).isFile() ) throw new Error(`Unable to find craft file ${filename}`)
 
-	return await readFile( join( CRAFT_STORAGE_PATH, filename ), {encoding: 'utf-8'} )
+	return await readFile( join( CRAFT_STORAGE_PATH, comp_ip, filename ), {encoding: 'utf-8'} )
 }
