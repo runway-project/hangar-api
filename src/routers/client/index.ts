@@ -84,7 +84,7 @@ clientRouter.get('/profile', async (req: Request, res: Response, next) => {
 clientRouter.post(
 	'/profile',
 
-	body('display_name').notEmpty().isLength({ min: 3, max: 100 }).trim().escape(),
+	body('display_name', 'must be between 3 and 100 characters').notEmpty().isLength({ min: 3, max: 100 }).trim().escape(),
 
 	async (req: Request, res: Response, next) => {
 		const result = validationResult(req)
@@ -119,7 +119,7 @@ clientRouter.get('/competitions/new', async (req: Request, res: Response, next) 
 clientRouter.post(
 	'/competitions/new',
 
-	body('name').notEmpty().isLength({ min: 2, max: 100 }).trim().escape(),
+	body('name', 'must be between 2 and 100 characters').notEmpty().isLength({ min: 2, max: 100 }).trim().escape(),
 	
 	async (req: Request, res: Response, next) => {
 		const result = validationResult(req)
@@ -153,9 +153,9 @@ clientRouter.get('/competitions/:id', async (req: Request, res: Response, next) 
 clientRouter.post(
 	'/competitions/:id',
 
-	body('name').isLength({ min: 2, max: 80 }).trim().escape(),
-	body('remote_orchestration_password').isLength({ min: 2, max: 200 }).trim().escape(),
-	body('description').isLength({ min: 2, max: 4096 }).trim().escape(),
+	body('name', 'must be between 2 and 100 characters').isLength({ min: 2, max: 100 }).trim().escape(),
+	body('remote_orchestration_password', 'must be between 2 and 200 characters').isLength({ min: 2, max: 200 }).trim().escape(),
+	body('description', 'must be between 2 and 4096 characters').isLength({ min: 2, max: 4096 }).trim().escape(),
 
 	async (req: Request, res: Response, next) => {
 		const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
@@ -218,6 +218,14 @@ clientRouter.post(
 
 	file_parser.single('craft_file'),
 
+	body('name')
+		.trim()
+		.isLength({ min: 2, max: 50 }).withMessage('must be between 2 and 50 characters')
+		.not().matches(/^\s+$/).withMessage('cannot only consist of whitespace')
+		.not().contains(',').withMessage('cannot contains commas')
+		.not().contains(';').withMessage('cannot contain semicolons')
+		.escape(),
+
 	async (req: Request, res: Response, next) => {
 		const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
 
@@ -225,10 +233,15 @@ clientRouter.post(
 
 		if( comp.status !== CompetitionState.ACCEPTING_SUBMISSIONS ) return next( new Error(`Competition is not accepting submissions`) )
 
+		const result = validationResult(req)
+
+		if( ! result.isEmpty() ) {
+			return res.marko(competition, { player: req.player, competition: comp, errors: result.array() })
+		}
+
 		// Do some validation
 		if( ! req.file?.buffer ) return next( new Error(`Craft file must be present`) )
 		if( ! NodeBuffer.isUtf8( req.file.buffer ) ) return next( new Error(`Craft file must contain only valid UTF-8 characters`) )
-		if( ! req.body?.name || req.body.name.length < 2 || req.body.name.length > 50 ) return next( new Error(`Craft name must be between 2 and 50 characters`) )
 
 		// Handle craft file stuff
 		const original_filename = req.file.originalname
