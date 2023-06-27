@@ -25,6 +25,8 @@ const IS_DEV = process.env.NODE_ENV === 'development'
 
 const app = express()
 
+app.set('trust proxy', true)
+
 // Gzip response bodies
 app.use(compressionMiddlware())
 
