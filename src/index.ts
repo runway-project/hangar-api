@@ -20,7 +20,7 @@ import StatusCode from './routers/api/StatusCode'
 console.log(`Starting hangar-api...`)
 console.time('startup')
 
-const PORT = 9999
+const PORT = process.env.PORT ?? 9999
 const IS_DEV = process.env.NODE_ENV === 'development'
 
 const app = express()
