@@ -65,19 +65,23 @@ style.scss {
 					<section.c-panel.l-stack>
 						<h2>Organizer Controls</h2>
 
-						<!-- Controls for updating the current state -->
-						<form action=`/competitions/${input.competition.id}/set-stage` method="POST">
-							<if(input.competition.status === CompetitionState.ACCEPTING_SUBMISSIONS)>
-								<input type="hidden" name="stage" value="closed">
+						<div class="l-stack-horizontal--sm">
+							<a href=`/competitions/${input.competition.id}/vessels.zip` class="c-button">Download Vessels</a>
 
-								<c-button type="submit" danger>Close Submissions</c-button>
-							</if>
-							<if(input.competition.status === CompetitionState.CLOSED)>
-								<input type="hidden" name="stage" value="accepting_submissions">
+							<!-- Controls for updating the current state -->
+							<form action=`/competitions/${input.competition.id}/set-stage` method="POST" style="display: inline-block;">
+								<if(input.competition.status === CompetitionState.ACCEPTING_SUBMISSIONS)>
+									<input type="hidden" name="stage" value="closed">
 
-								<c-button type="submit" danger>Re-open Submissions</c-button>
-							</if>
-						</form>
+									<c-button type="submit" danger>Close Submissions</c-button>
+								</if>
+								<if(input.competition.status === CompetitionState.CLOSED)>
+									<input type="hidden" name="stage" value="accepting_submissions">
+
+									<c-button type="submit" danger>Re-open Submissions</c-button>
+								</if>
+							</form>
+						</div>
 
 						<!-- Controls for updating comp settings -->
 						<form.l-stack action=`/competitions/${input.competition.id}` method="POST">

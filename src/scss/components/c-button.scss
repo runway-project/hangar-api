@@ -18,6 +18,8 @@
 
 	cursor: pointer;
 
+	border-radius: 0.5rem;
+
 	&--danger {
 		--color-bg: var(--color-red-60);
 		--color-bg-focus: var(--color-red-50);

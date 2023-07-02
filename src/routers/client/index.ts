@@ -1,8 +1,9 @@
 
 import express, {NextFunction, Request, Response, Router} from 'express'
 import markoPlugin from '@marko/express'
-import sirv from 'sirv'
 import NodeBuffer from 'node:buffer'
+
+import AdmZip from 'adm-zip'
 
 import bodyParser from 'body-parser'
 import { body, validationResult } from 'express-validator'
@@ -28,8 +29,6 @@ export const clientRouter = Router()
 
 // Set up Marko and such
 clientRouter.use(markoPlugin())
-
-clientRouter.use('/assets', sirv('dist/assets'))
 
 // Parse request bodies
 clientRouter.use(bodyParser.urlencoded({
@@ -283,6 +282,42 @@ clientRouter.post(
 		res.redirect(`/competitions/${req.params.id}`)
 	}
 )
+
+
+clientRouter.get('/competitions/:id/vessels.zip', async (req, res, next) => {
+	const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
+
+	if( ! comp ) return res.redirect('/404')
+
+	const vessels = comp.vessels
+
+	// Iterate through the competition's vessels, adding them to a convenient zip file
+	const craft_files = await Promise.all(vessels.map(vessel => {
+		return new Promise(async resolve => {
+			let craft_file = await loadCraftFile(vessel)
+
+			const name = `${vessel.player.name}_${vessel.name}`
+
+			craft_file = craft_file
+				.replace(/ship = [^\r\n]+/i, `ship = ${name}`)
+				.replace(/version = 1[^\r\n]+/i, 'version = 1.12.2')
+
+			resolve({ craft_file, vessel, name })
+		})
+	})) as {craft_file: string, name: string, vessel: Vessel}[]
+
+	const zip_file = new AdmZip()
+
+	craft_files.forEach(({name, craft_file}) => {
+		zip_file.addFile( name + '.craft', Buffer.from(craft_file) )
+	})
+
+	const buff = await zip_file.toBufferPromise()
+
+	res.type('application/zip')
+	res.setHeader('Content-disposition', `attachment; filename=${comp.id}_vessels.zip`);
+	res.end( buff )
+})
 
 
 // MISC

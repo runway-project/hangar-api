@@ -7,6 +7,7 @@ import expressSession from 'express-session'
 import compressionMiddlware from 'compression'
 import rateLimit from 'express-rate-limit'
 import { TypeormStore } from 'connect-typeorm'
+import sirv from 'sirv'
 
 import { discordOAuth } from './middleware/auth'
 import { addCSP } from './middleware/csp'
@@ -39,6 +40,8 @@ app.use(rateLimit({
 	legacyHeaders: false,
 	message: `Too many requests in too short a timeframe.`
 }))
+
+clientRouter.use('/assets', sirv('dist/assets'))
 
 // Cookie-based session middleware
 app.use(expressSession({
@@ -87,7 +90,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 // Wait for the DB connection to complete before accepting connections
 db.initialize()
 	.then(async () => {
-		app.listen(PORT, '127.0.0.1', () => {
+		app.listen(PORT as number, '127.0.0.1', () => {
 			console.timeEnd('startup')
 		})
 	})

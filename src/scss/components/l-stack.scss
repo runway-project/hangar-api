@@ -16,3 +16,21 @@
 		margin-top: 0.5rem;
 	}
 }
+
+.l-stack-horizontal {
+	> * + * {
+		margin-left: 1rem;
+	}
+}
+
+.l-stack-horizontal--lg {
+	> * + * {
+		margin-left: 1.5rem;
+	}
+}
+
+.l-stack-horizontal--sm {
+	> * + * {
+		margin-left: 0.5rem;
+	}
+}
