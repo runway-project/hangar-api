@@ -296,7 +296,7 @@ clientRouter.get('/competitions/:id/vessels.zip', async (req, res, next) => {
 		return new Promise(async resolve => {
 			let craft_file = await loadCraftFile(vessel)
 
-			const name = `${vessel.player.name}_${vessel.name}`
+			const name = `${vessel.player.display_name}_${vessel.name}`
 
 			craft_file = craft_file
 				.replace(/ship = [^\r\n]+/i, `ship = ${name}`)
