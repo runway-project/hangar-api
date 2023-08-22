@@ -1,0 +1,58 @@
+import video_url from '../assets/img/icbm_cropped.mp4'
+
+class {
+	declare state: {
+		pizza_ordered: boolean,
+	}
+
+	onCreate() {
+		this.state = {
+			pizza_ordered: false
+		}
+	}
+
+	orderPizza() {
+		this.state.pizza_ordered = true
+	}
+}
+
+style.scss {
+	.c-order-pizza {
+		&__video {
+			width: 100%;
+			height: auto;
+		}
+
+		&__footer {
+			font-size: 0.875rem;
+			opacity: 0.5;
+			margin-top: 8rem;
+		}
+	}
+}
+
+<div.l-stack>
+	<if(! state.pizza_ordered)>
+		<h1>Order a Pizza</h1>
+
+		<c-button on-click('orderPizza')>
+			Place your order
+		</c-button>
+
+		<p>Guaranteed worldwide delivery within 22 minutes!</p>
+	</if>
+	<else>
+		<h1>Order placed!</h1>
+
+		<video.c-order-pizza__video autoplay muted>
+			<source src=video_url type="video/mp4">
+		</video>
+
+		<p>Your pizza will be delivered by ICBM within the next 22 minutes!</p>
+
+		<aside.c-order-pizza__footer>
+			<p>This meme was a high-value feature for me to implement</p>
+			<p>I am good at software development</p>
+		</aside>
+	</else>
+</div>

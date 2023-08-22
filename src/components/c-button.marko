@@ -5,10 +5,20 @@ export interface Input {
 	danger: boolean,
 }
 
+class {
+	handleClick(e) {
+		this.emit('click', e)
+	}
+}
+
 style.scss {
 
 }
 
-<button class=`c-button ${input.success ? 'c-button--success' : ''} ${input.danger ? 'c-button--danger' : ''}` type=input.type ?? 'button'>
+<button
+	class=`c-button ${input.success ? 'c-button--success' : ''} ${input.danger ? 'c-button--danger' : ''}`
+	type=input.type ?? 'button'
+	on-click("handleClick")
+>
 	<${input.renderBody}/>
 </button>

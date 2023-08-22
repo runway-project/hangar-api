@@ -41,5 +41,6 @@ export default defineConfig({
 		target: 'es2022',
 		sourcemap: true,
 		emptyOutDir: false,
-	}
+	},
+	assetsInclude: ['**/*.mp4'],
 })

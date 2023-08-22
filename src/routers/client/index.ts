@@ -22,6 +22,7 @@ import competitions from '../../pages/competitions/index.marko'
 import competitions_new from '../../pages/competitions/new.marko'
 import competition from '../../pages/competitions/id.marko'
 import competition_submit_vessel from '../../pages/competitions/id_submit-vessel.marko'
+import pizza from '../../pages/pizza.marko'
 
 
 /** A router which handles rendering HTML with Marko */
@@ -102,6 +103,13 @@ clientRouter.post(
 	}
 )
 
+// PIZZA
+// ----------------------------------------------------------------------------
+
+clientRouter.get('/pizza', async (req: Request, res: Response) => {
+	res.marko(pizza)
+})
+
 // COMPETITIONS
 // ----------------------------------------------------------------------------
 
@@ -153,7 +161,7 @@ clientRouter.post(
 	'/competitions/:id',
 
 	body('name', 'must be between 2 and 100 characters').isLength({ min: 2, max: 100 }).trim().escape(),
-	body('remote_orchestration_password', 'must be between 2 and 200 characters').isLength({ min: 2, max: 200 }).trim().escape(),
+	body('remote_orchestration_password', 'must be between 2 and 200 characters').isLength({ min: 2, max: 200 }),
 	body('description', 'must be between 2 and 4096 characters').isLength({ min: 2, max: 4096 }).trim().escape(),
 
 	async (req: Request, res: Response, next) => {
@@ -283,6 +291,10 @@ clientRouter.post(
 	}
 )
 
+clientRouter.post('/competitions/:id/vessels/:vessel/delete', async (req, res, next) => {
+
+})
+
 
 clientRouter.get('/competitions/:id/vessels.zip', async (req, res, next) => {
 	const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
@@ -318,7 +330,6 @@ clientRouter.get('/competitions/:id/vessels.zip', async (req, res, next) => {
 	res.setHeader('Content-disposition', `attachment; filename=${comp.id}_vessels.zip`);
 	res.end( buff )
 })
-
 
 // MISC
 // ----------------------------------------------------------------------------
