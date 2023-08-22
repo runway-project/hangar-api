@@ -230,8 +230,7 @@ clientRouter.post(
 		.isLength({ min: 2, max: 50 }).withMessage('must be between 2 and 50 characters')
 		.not().matches(/^\s+$/).withMessage('cannot only consist of whitespace')
 		.not().contains(',').withMessage('cannot contains commas')
-		.not().contains(';').withMessage('cannot contain semicolons')
-		.escape(),
+		.not().contains(';').withMessage('cannot contain semicolons'),
 
 	async (req: Request, res: Response, next) => {
 		const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })

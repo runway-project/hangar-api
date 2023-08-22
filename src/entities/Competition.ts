@@ -15,6 +15,7 @@ export enum CompetitionState {
 	COMPLETED = 'completed',
 }
 
+
 @Entity()
 @Unique(['name'])
 export class Competition extends OwnedBaseEntity {

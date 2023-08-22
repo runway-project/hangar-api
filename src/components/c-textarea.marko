@@ -1,0 +1,51 @@
+
+export interface Input {
+	label: string,
+	name: string,
+	value?: string,
+	required?: boolean,
+}
+
+style.scss {
+	.c-textarea {
+		display: block;
+
+		&__label {
+			display: block;
+			padding-left: 0.5rem;
+
+			line-height: 1;
+
+			font-weight: 650;
+			font-size: 0.875rem;
+		}
+
+		&__input {
+			all: inherit;
+
+			display: block;
+
+			min-width: 100%;
+			max-width: 100%;
+
+			min-height: 8rem;
+
+			padding: 0.5rem;
+			margin-top: 0.125rem;
+
+			background: var(--color-bg-secondary);
+			border: 2px solid var(--color-form-field-border);
+
+			font-family: monospace;
+
+			&:focus {
+				border-color: var(--color-primary);
+			}
+		}
+	}
+}
+
+<label.c-textarea>
+	<strong.c-textarea__label>${input.label}</strong>
+	<textarea.c-textarea__input name=input.name required=input.required>${input.value}</textarea>
+</label>

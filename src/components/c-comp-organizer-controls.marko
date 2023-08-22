@@ -1,0 +1,70 @@
+
+import type { Competition } from '../entities/Competition'
+
+export interface Input {
+	competition: any
+}
+
+class {
+	declare state: {
+		form_visible: boolean,
+	}
+
+	onCreate() {
+		this.state = {
+			form_visible: false
+		}
+	}
+
+	toggleForm() {
+		this.state.form_visible = ! this.state.form_visible
+	}
+}
+
+<section.c-panel.l-stack--sm>
+	<h2>Organizer Controls</h2>
+
+	<div class="l-stack-horizontal--sm">
+		<span>
+			<c-button on-click('toggleForm')>
+				<if(state.form_visible)>
+					Hide Settings
+				</if>
+				<else>
+					Edit Settings
+				</else>
+			</c-button>
+		</span>
+
+		<span>
+			<a href=`/competitions/${input.competition.id}/vessels.zip` class="c-button">Download Vessels</a>
+		</span>
+
+		<!-- Controls for updating the current state -->
+		<form action=`/competitions/${input.competition.id}/set-stage` method="POST" style="display: inline-block;">
+			<if(input.competition.status === 'accepting_submissions')>
+				<input type="hidden" name="stage" value="closed">
+
+				<c-button type="submit" danger>Close Submissions</c-button>
+			</if>
+			<if(input.competition.status === 'closed')>
+				<input type="hidden" name="stage" value="accepting_submissions">
+
+				<c-button type="submit" danger>Re-open Submissions</c-button>
+			</if>
+		</form>
+	</div>
+
+	<!-- Controls for updating comp settings -->
+	<if(state.form_visible)>
+		<form.l-stack action=`/competitions/${input.competition.id}` method="POST" style="margin-top: 1rem;">
+			<c-input type="text" name="name" title="Competition Name" value=input.competition.name wide/>
+
+			<c-input type="text" name="remote_orchestration_password" title="Remote Orchestration Password" value=input.competition.remote_orchestration_password wide/>
+
+			<c-textarea name="description" label="Description (accepts Markdown)" value=input.competition.description/>
+
+			<c-button type="submit">Update Settings</c-button>
+		</form>
+	</if>
+</section>
