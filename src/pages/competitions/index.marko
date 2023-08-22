@@ -28,16 +28,29 @@ style.scss {
 			</a>
 		</div>
 
-		<for|competition| of=input.competitions>
-			<section.c-comp-details>
-				<h3>${competition.name} (${competition.status})</h3>
+		$ const sorted_comps = input.competitions.sort( (a, b) => b.created_at - a.created_at )
 
-				<p>
-					Created by ${competition.organizers.map(player => player.display_name).join(', ')}
-				</p>
+		$ const open_comps = sorted_comps.filter( c => c.status === 'accepting_submissions' || c.status === 'running' )
+		$ const past_comps = sorted_comps.filter( c => c.status !== 'accepting_submissions' && c.status !== 'running' )
 
-				<a.c-button href=`/competitions/${competition.id}`>View</a>
-			</section>
+		<h2>Active Competitions</h2>
+
+		<if(! open_comps.length )>
+			<p>There aren't currently any active competitions. Want to run one? <a href="/competitions/new">Click here.</a></p>
+		</if>
+
+		<for|competition| of=open_comps>
+			<c-comp-details competition=competition/>
+		</for>
+
+		<h2>Past Competitions</h2>
+
+		<if(! past_comps.length )>
+			<p>Nothing to see here.</p>
+		</if>
+
+		<for|competition| of=past_comps>
+			<c-comp-details competition=competition/>
 		</for>
 	</main>
 </g-layout>

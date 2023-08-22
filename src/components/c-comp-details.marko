@@ -1,0 +1,89 @@
+import { Player } from '../entities/Player'
+import { Competition, CompetitionState } from '../entities/Competition'
+
+export interface Input {
+	competition: Competition
+}
+
+static function prettyPrintStatus( status: CompetitionState ) {
+	switch( status ) {
+		case CompetitionState.ACCEPTING_SUBMISSIONS: return 'Open'
+		case CompetitionState.CLOSED: return 'Closed'
+		case CompetitionState.RUNNING: return 'Running now!'
+		case CompetitionState.COMPLETED: return 'Completed'
+	}
+}
+
+style.scss {
+	.c-comp-details {
+		--accent-color: var(--color-gray-50);
+
+		background: var(--color-bg-secondary);
+
+		border: 2px solid var(--accent-color);
+		border-radius: 1rem;
+		padding: 1rem 0.75rem;
+
+		position: relative;
+
+		&--accepting_submissions {
+			--accent-color: var(--color-green-50);
+		}
+
+		&--closed {
+			--accent-color: var(--color-red-50);
+		}
+
+		&--running {
+			--accent-color: var(--color-blue-50);
+		}
+
+		&--completed {
+			--accent-color: var(--color-gray-50);
+		}
+
+		&__body {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+
+			> *:first-child {
+				flex-grow: 1;
+			}
+		}
+
+		&__status {
+			position: absolute;
+			top: -0.75rem;
+			right: 1rem;
+
+			font-size: 0.875rem;
+			line-height: 1;
+
+			border-radius: 0.5rem;
+
+			text-transform: uppercase;
+			font-weight: 600;
+
+			padding: 0.25rem 0.5rem;
+			background: var(--accent-color);
+		}
+	}
+}
+
+<section.c-comp-details.c-comp-details--${input.competition.status}>
+	<div.c-comp-details__status>${prettyPrintStatus(input.competition.status)}</div>
+
+	<div.c-comp-details__body>
+		<div>
+			<h3>${input.competition.name}</h3>
+
+			<p>
+				Created by ${input.competition.organizers.map(player => player.display_name).join(', ')} on ${input.competition.created_at.toLocaleString()}
+			</p>
+		</div>
+
+		<a.c-button href=`/competitions/${input.competition.id}`>View</a>
+	</div>
+
+</section>

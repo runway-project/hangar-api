@@ -13,7 +13,7 @@ export const db = new DataSource({
 	type: 'sqlite',
 	database: join(DB_PATH, 'dev.sqlite3'),
 	entities: [Player, Vessel, Competition, Session],
-	logging: true,
+	logging: false,
 	//synchronize: IS_DEV,
 	synchronize: true,
 })
