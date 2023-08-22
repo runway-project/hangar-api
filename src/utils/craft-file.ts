@@ -302,10 +302,7 @@ export function queryField( craft: KSPCraft, part_id: string, module_id: string,
  * @returns A safe filename for the craft
  */
 export function getSafeCraftFileName( craft: Vessel ) {
-	const base = encodeURIComponent( craft.name )
-	const player_name = encodeURIComponent( craft.player.name )
-
-	return `${craft.playerId}_${craft.id}_${player_name}_${base}.craft`
+	return `${craft.playerId}_${craft.id}.craft`
 }
 
 /**

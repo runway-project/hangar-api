@@ -311,8 +311,19 @@ clientRouter.get('/competitions/:id/vessels.zip', async (req, res, next) => {
 			const name = `${vessel.player.display_name}_${vessel.name}`
 
 			craft_file = craft_file
+				// Replace whatever internal name this craft file has with what the user's set in the UI
 				.replace(/ship = [^\r\n]+/i, `ship = ${name}`)
+
+				// Set the KSP version to 1.12.2, to prevent any confusion
 				.replace(/version = 1[^\r\n]+/i, 'version = 1.12.2')
+
+				// Forcibly re-write flag URLs to the correct folder
+				.replace(/currentflagUrl = ([^\r\n]+)/gi, (match) => {
+					const parts = match.split('/')
+					const flag = parts[ parts.length - 1 ]
+
+					return `currentFlagUrl = Custom/Flags/${flag}`
+				})
 
 			resolve({ craft_file, vessel, name })
 		})
@@ -321,7 +332,7 @@ clientRouter.get('/competitions/:id/vessels.zip', async (req, res, next) => {
 	const zip_file = new AdmZip()
 
 	craft_files.forEach(({name, craft_file}) => {
-		zip_file.addFile( name + '.craft', Buffer.from(craft_file) )
+		zip_file.addFile( encodeURIComponent(name) + '.craft', Buffer.from(craft_file) )
 	})
 
 	const buff = await zip_file.toBufferPromise()
