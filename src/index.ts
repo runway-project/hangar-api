@@ -1,3 +1,4 @@
+/// <reference path="../env.d.ts"/>
 
 import 'dotenv/config'
 //import 'reflect-metadata'
