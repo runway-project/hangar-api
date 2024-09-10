@@ -42,6 +42,9 @@ export class Competition extends OwnedBaseEntity {
 	@Column({ type: 'varchar' })
 	remote_orchestration_password: string
 
+	@Column({ type: 'int', default: () => 1 })
+	max_submissions: number
+
 	constructor() {
 		super()
 
@@ -54,5 +57,15 @@ export class Competition extends OwnedBaseEntity {
 		const matching_owner = this.organizers.find( organizer => organizer.id === user.id )
 
 		return !! matching_owner
+	}
+
+	/**
+	 * Check how many vessels the specified player has submitted to the competition
+	 * 
+	 * @param player The player to check
+	 * @returns Vessel submission count
+	 */
+	getPlayerSubmissionCount( player: Player ): number {
+		return this.vessels.filter(vessel => vessel.playerId === player.id).length
 	}
 }

@@ -1,5 +1,6 @@
 import { ValidationError } from 'express-validator'
 import {parse} from 'marked'
+import sanitizeHtml from 'sanitize-html';
 
 import { Player } from '../../entities/Player'
 import { Competition, CompetitionState } from '../../entities/Competition'
@@ -34,7 +35,7 @@ style.scss {
 		<p>Created by ${input.competition.organizers.map(player => player.display_name).join(', ')}</p>
 
 		<div>
-			$!{parse(input.competition.description ?? '*No description provided*', { headerIds: false, mangle: false, })}
+			$!{sanitizeHtml(parse(input.competition.description ?? '*No description provided*', { headerIds: false, mangle: false, }))}
 		</div>
 
 		<h2>Entries <if(input.competition.vessels?.length)>(${input.competition.vessels.length} vessels)</if></h2>

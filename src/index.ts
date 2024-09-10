@@ -55,7 +55,7 @@ app.use(expressSession({
 	saveUninitialized: false,
 	store: new TypeormStore({
 		cleanupLimit: 2,
-		ttl: 7 * 60 * 60
+		ttl: 30 * 60 * 60 * 24
 	}).connect( db.getRepository(Session) ),
 }))
 

@@ -160,9 +160,9 @@ clientRouter.get('/competitions/:id', async (req: Request, res: Response, next) 
 clientRouter.post(
 	'/competitions/:id',
 
-	body('name', 'must be between 2 and 100 characters').isLength({ min: 2, max: 100 }).trim().escape(),
+	body('name', 'must be between 2 and 100 characters').isLength({ min: 2, max: 100 }).trim(),
 	body('remote_orchestration_password', 'must be between 2 and 200 characters').isLength({ min: 2, max: 200 }),
-	body('description', 'must be between 2 and 4096 characters').isLength({ min: 2, max: 4096 }).trim().escape(),
+	body('description', 'must be between 2 and 4096 characters').isLength({ min: 2, max: 4096 }).trim(),
 
 	async (req: Request, res: Response, next) => {
 		const comp = await db.manager.findOneBy(Competition, { id: parseInt(req.params.id) })
@@ -249,6 +249,13 @@ clientRouter.post(
 		if( ! req.file?.buffer ) return next( new Error(`Craft file must be present`) )
 		if( ! NodeBuffer.isUtf8( req.file.buffer ) ) return next( new Error(`Craft file must contain only valid UTF-8 characters`) )
 
+		// Check whether the player has exceeded max submissions
+		const existing_submissions = comp.getPlayerSubmissionCount(req.player)
+
+		if( existing_submissions >= (comp.max_submissions ?? 1) ) {
+			return res.marko(competition, { player: req.player, competition: comp, errors: ['You have already submitted the max number of vessels'] })
+		}
+
 		// Handle craft file stuff
 		const original_filename = req.file.originalname
 		const craft_file_buffer = req.file.buffer
@@ -331,7 +338,7 @@ clientRouter.get('/competitions/:id/vessels.zip', async (req, res, next) => {
 	const zip_file = new AdmZip()
 
 	craft_files.forEach(({name, craft_file}) => {
-		zip_file.addFile( encodeURIComponent(name) + '.craft', Buffer.from(craft_file) )
+		zip_file.addFile( encodeURIComponent(name).replace(/%20|_/g, ' ') + '.craft', Buffer.from(craft_file) )
 	})
 
 	const buff = await zip_file.toBufferPromise()
