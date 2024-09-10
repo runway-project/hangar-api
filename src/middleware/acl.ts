@@ -1,6 +1,6 @@
 
 import {NextFunction, Request, Response, Router} from 'express'
-import { OwnedBaseEntity } from '../entities/OwnedBaseEntity'
+import { OwnedBaseEntity } from '../entities/OwnedBaseEntity.js'
 
 /**
  * Permissions which can be required for a given route. Different entities

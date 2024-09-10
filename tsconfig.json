@@ -1,24 +1,27 @@
 {
-	"compilerOptions": {
-		"module": "ES2022",
-		"declaration": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"esModuleInterop": true,
-		"target": "ESNext",
-		"noImplicitAny": true,
-		"moduleResolution": "node",
-		"sourceMap": true,
-		"outDir": "dist",
-		"baseUrl": ".",
-		"paths": {
-			"*": [
-				"node_modules/*"
-			]
-		},
-		"lib": ["ES6", "DOM"]
-	},
-	"include": [
-		"src/**/*"
-	]
+  "compilerOptions": {
+    "module": "NodeNext",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+	"skipLibCheck": true,
+    "lib": [
+      "ES6",
+      "DOM"
+    ],
+    "jsx": "preserve"
+  },
+  "include": [
+    "src/*.ts",
+	"src/entities/**/*",
+	"src/middleware/**/*",
+	"src/routers/**/*",
+	"src/utils/**/*"
+  ]
 }

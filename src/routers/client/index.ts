@@ -1,6 +1,5 @@
 
 import express, {NextFunction, Request, Response, Router} from 'express'
-import markoPlugin from '@marko/express'
 import NodeBuffer from 'node:buffer'
 
 import AdmZip from 'adm-zip'
@@ -9,27 +8,24 @@ import bodyParser from 'body-parser'
 import { body, validationResult } from 'express-validator'
 import multer, {memoryStorage} from 'multer'
 
-import { db } from '../../db'
-import { Player } from '../../entities/Player'
-import { Competition, CompetitionState } from '../../entities/Competition'
-import { Vessel } from '../../entities/Vessel'
+import { db } from '../../db.js'
+import { Player } from '../../entities/Player.js'
+import { Competition, CompetitionState } from '../../entities/Competition.js'
+import { Vessel } from '../../entities/Vessel.js'
 
-import { saveCraftFile, loadCraftFile } from '../../utils/craft-file'
+import { saveCraftFile, loadCraftFile } from '../../utils/craft-file.js'
 
-import index from '../../pages/index.marko'
+/*import index from '../../pages/index.marko'
 import profile from '../../pages/profile.marko'
 import competitions from '../../pages/competitions/index.marko'
 import competitions_new from '../../pages/competitions/new.marko'
 import competition from '../../pages/competitions/id.marko'
 import competition_submit_vessel from '../../pages/competitions/id_submit-vessel.marko'
-import pizza from '../../pages/pizza.marko'
+import pizza from '../../pages/pizza.marko'*/
 
 
 /** A router which handles rendering HTML with Marko */
 export const clientRouter = Router()
-
-// Set up Marko and such
-clientRouter.use(markoPlugin())
 
 // Parse request bodies
 clientRouter.use(bodyParser.urlencoded({
@@ -69,7 +65,7 @@ clientRouter.use( async (req: Request, res, next) => {
 // ----------------------------------------------------------------------------
 
 // Home Page
-clientRouter.get('/', async (req: Request, res: Response, next) => {
+/*clientRouter.get('/', async (req: Request, res: Response, next) => {
 	res.marko(index, { player: req.player })
 })
 
@@ -346,7 +342,7 @@ clientRouter.get('/competitions/:id/vessels.zip', async (req, res, next) => {
 	res.type('application/zip')
 	res.setHeader('Content-disposition', `attachment; filename=${comp.id}_vessels.zip`);
 	res.end( buff )
-})
+})*/
 
 // MISC
 // ----------------------------------------------------------------------------

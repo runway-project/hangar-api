@@ -2,7 +2,7 @@
 import { readFile, writeFile, mkdir, stat } from 'fs/promises'
 import { join } from 'path'
 
-import { Vessel } from '../entities/Vessel'
+import { Vessel } from '../entities/Vessel.js'
 
 import { Vector3, Quaternion } from 'three'
 

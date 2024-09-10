@@ -1,6 +1,6 @@
 
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { Player } from './Player'
+import { Player } from './Player.js'
 
 /**
  * A generic entity, with created_at and modified_at columns, but no other

@@ -1,7 +1,7 @@
 
 import { Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { Player } from './Player'
-import { CustomBaseEntity } from './CustomBaseEntity'
+import { Player } from './Player.js'
+import { CustomBaseEntity } from './CustomBaseEntity.js'
 
 /**
  * An entity which can be "owned" by a player or group of players, allowing

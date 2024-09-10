@@ -1,8 +1,8 @@
 
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Player } from './Player'
-import { OwnedBaseEntity } from './OwnedBaseEntity'
-import { Competition } from './Competition'
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm'
+import { Player } from './Player.js'
+import { OwnedBaseEntity } from './OwnedBaseEntity.js'
+import { Competition } from './Competition.js'
 
 @Entity()
 export class Vessel extends OwnedBaseEntity {
@@ -11,7 +11,7 @@ export class Vessel extends OwnedBaseEntity {
 	id: number
 
 	@ManyToOne(() => Player, player => player.vessels, {eager: true})
-	player: Player
+	player: Relation<Player>
 
 	@ManyToOne(() => Competition)
 	competition: Promise<Competition>

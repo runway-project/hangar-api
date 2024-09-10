@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from 'express'
 import fetch from 'node-fetch'
 
-import { Player } from '../entities/Player'
+import { Player } from '../entities/Player.js'
 import { DataSource } from 'typeorm'
 
 export interface UserSession {

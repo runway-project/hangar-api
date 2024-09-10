@@ -1,9 +1,9 @@
 
 import { Entity, Column, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinTable, ManyToMany, Unique, AfterLoad } from 'typeorm'
-import { Player } from './Player'
-import { OwnedBaseEntity } from './OwnedBaseEntity'
-import { Vessel } from './Vessel'
-import { generatePassphrase } from '../utils/passphrase'
+import { Player } from './Player.js'
+import { OwnedBaseEntity } from './OwnedBaseEntity.js'
+import { Vessel } from './Vessel.js'
+import { generatePassphrase } from '../utils/passphrase.js'
 
 /**
  * What stage is the current competition in?

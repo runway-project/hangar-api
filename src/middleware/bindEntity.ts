@@ -1,7 +1,7 @@
 
 import { Request, Response, NextFunction } from 'express'
-import { CustomBaseEntity } from '../entities/CustomBaseEntity'
-import { Perms } from './acl'
+import { CustomBaseEntity } from '../entities/CustomBaseEntity.js'
+import { Perms } from './acl.js'
 
 
 export function bindEntity( entity: CustomBaseEntity, required_perms: Perms[] = [] ) {

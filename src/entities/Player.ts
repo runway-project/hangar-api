@@ -1,7 +1,7 @@
 
 import { Entity, Column, OneToMany, PrimaryColumn, Unique } from 'typeorm'
-import { Vessel } from './Vessel'
-import { OwnedBaseEntity } from './OwnedBaseEntity'
+import { Vessel } from './Vessel.js'
+import { OwnedBaseEntity } from './OwnedBaseEntity.js'
 
 @Entity()
 @Unique(['display_name'])

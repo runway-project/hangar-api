@@ -1,0 +1,1 @@
+/// <reference path="client/.astro/types.d.ts" />

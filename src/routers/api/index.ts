@@ -1,8 +1,8 @@
 
 import {NextFunction, Request, Response, Router} from 'express'
-import StatusCode from './StatusCode'
-import { acl, Perms } from '../../middleware/acl'
-import { Player } from '../../entities/Player'
+import StatusCode from './StatusCode.js'
+import { acl, Perms } from '../../middleware/acl.js'
+import { Player } from '../../entities/Player.js'
 
 export const apiRouter = Router()
 

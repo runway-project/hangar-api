@@ -1,23 +1,22 @@
-/// <reference path="../env.d.ts"/>
 
 import 'dotenv/config'
-//import 'reflect-metadata'
 
 import express, {Request, Response, NextFunction} from 'express'
 import expressSession from 'express-session'
-import compressionMiddlware from 'compression'
+import compressionMiddleware from 'compression'
 import rateLimit from 'express-rate-limit'
 import { TypeormStore } from 'connect-typeorm'
-import sirv from 'sirv'
 
-import { discordOAuth } from './middleware/auth'
-import { addCSP } from './middleware/csp'
+import { discordOAuth } from './middleware/auth.js'
+import { addCSP } from './middleware/csp.js'
 
-import { db } from './db'
-import { Session } from './entities/Session'
+import { db } from './db.js'
+import { Session } from './entities/Session.js'
 
-import { clientRouter } from './routers/client'
-import StatusCode from './routers/api/StatusCode'
+import StatusCode from './routers/api/StatusCode.js'
+
+//@ts-ignore - No typings for this yet
+import { handler as ssrHandler } from '../dist/astro/server/entry.mjs'
 
 console.log(`Starting hangar-api...`)
 console.time('startup')
@@ -30,7 +29,13 @@ const app = express()
 app.set('trust proxy', true)
 
 // Gzip response bodies
-app.use(compressionMiddlware())
+app.use(compressionMiddleware())
+
+// Astro static assets
+app.use('/', express.static('astro/client/'))
+
+// Astro client middleware
+app.use(ssrHandler)
 
 // Set up basic, global rate limiting.
 // TODO: Set up something like Redis to track this info
@@ -39,10 +44,9 @@ app.use(rateLimit({
 	max: 100,
 	standardHeaders: false,
 	legacyHeaders: false,
-	message: `Too many requests in too short a timeframe.`
+	message: `Too many requests in too short a timeframe.`,
+	validate: false,
 }))
-
-clientRouter.use('/assets', sirv('dist/assets'))
 
 // Cookie-based session middleware
 app.use(expressSession({
@@ -71,10 +75,6 @@ app.use(discordOAuth({
 	redirect_uri: process.env.SITE_URL,
 }, db))
 
-// Client routes
-app.use(clientRouter)
-
-
 /**
  * Global fallback error handler, if no other route has provided a valid error
  * handler.
@@ -93,6 +93,7 @@ db.initialize()
 	.then(async () => {
 		app.listen(PORT as number, '127.0.0.1', () => {
 			console.timeEnd('startup')
+			console.log(`Listening on localhost:${PORT}`)
 		})
 	})
 	.catch(ex => {
