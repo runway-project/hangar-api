@@ -32,7 +32,7 @@ app.set('trust proxy', true)
 app.use(compressionMiddleware())
 
 // Astro static assets
-app.use('/', express.static('astro/client/'))
+app.use('/', express.static('dist/astro/client/'))
 
 // Astro client middleware
 app.use(ssrHandler)

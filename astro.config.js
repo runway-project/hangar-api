@@ -11,7 +11,6 @@ export default defineConfig({
 		mode: 'middleware'
 	}),
 
-	srcDir: 'src/client/src',
 	integrations: [vue()],
 	outDir: './dist/astro',
 	site: 'https://hangar-api.space',

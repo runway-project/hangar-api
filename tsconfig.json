@@ -10,7 +10,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
-	"skipLibCheck": true,
+    "skipLibCheck": true,
     "lib": [
       "ES6",
       "DOM"
@@ -19,9 +19,9 @@
   },
   "include": [
     "src/*.ts",
-	"src/entities/**/*",
-	"src/middleware/**/*",
-	"src/routers/**/*",
-	"src/utils/**/*"
+    "src/entities/**/*",
+    "src/middleware/**/*",
+    "src/routers/**/*",
+    "src/utils/**/*"
   ]
 }
